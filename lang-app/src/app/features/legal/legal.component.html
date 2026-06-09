@@ -1,0 +1,141 @@
+<div class="max-w-3xl mx-auto px-5 sm:px-8 py-12">
+
+  <a routerLink="/" class="inline-flex items-center gap-1.5 text-[14px] text-sage-600 dark:text-stone-300 hover:text-sage-800 mb-8 transition">
+    <lucide-icon [img]="ArrowLeft" class="w-4 h-4" /> Về trang chủ
+  </a>
+
+  <div class="flex items-start gap-3 fade-up">
+    <span class="grid place-items-center w-11 h-11 rounded-xl bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200 shrink-0">
+      <lucide-icon [img]="kind() === 'privacy' ? ShieldCheck : FileText" class="w-5 h-5" />
+    </span>
+    <div>
+      <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium">Pháp lý</p>
+      <h1 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">
+        {{ kind() === 'privacy' ? 'Chính sách bảo mật' : 'Điều khoản sử dụng' }}
+      </h1>
+    </div>
+  </div>
+  <p class="mt-3 text-[13px] text-sage-500">Cập nhật lần cuối: {{ updated }}</p>
+
+  <!-- Cảnh báo y khoa -->
+  <div class="mt-6 flex items-start gap-3 p-4 rounded-xl bg-sos-50 dark:bg-sos-900/20 border border-sos-200 dark:border-sos-800">
+    <lucide-icon [img]="ShieldCheck" class="w-5 h-5 text-sos-600 dark:text-sos-300 shrink-0 mt-0.5" />
+    <p class="text-[14px] text-sos-700 dark:text-sos-200 leading-relaxed">
+      Lặng là công cụ hỗ trợ &amp; tham khảo, <strong>không thay thế chẩn đoán hay điều trị y khoa chuyên môn</strong> và không dành cho tình huống cấp cứu. Nếu bạn đang gặp nguy hiểm tức thời, hãy gọi <strong>115</strong> hoặc đến cơ sở y tế gần nhất.
+    </p>
+  </div>
+
+  <div class="mt-8 space-y-6 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">
+
+    @if (kind() === 'terms') {
+      <!-- ĐIỀU KHOẢN SỬ DỤNG -->
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">1. Chấp nhận điều khoản</h2>
+        <p>Khi truy cập và sử dụng Lặng ("dịch vụ"), bạn đồng ý với các điều khoản dưới đây. Nếu không đồng ý, vui lòng ngừng sử dụng dịch vụ.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">2. Bản chất dịch vụ</h2>
+        <p>Lặng cung cấp công cụ tự đánh giá tâm lý, kiến thức tham khảo, theo dõi cảm xúc và danh bạ hỗ trợ. Các bài đánh giá (PHQ-9, GAD-7, EPDS…) chỉ mang tính <strong>sàng lọc và tham khảo</strong>, không phải công cụ chẩn đoán. Kết quả không thay thế đánh giá của chuyên gia y tế.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">3. Không dành cho cấp cứu</h2>
+        <p>Dịch vụ không theo dõi người dùng theo thời gian thực và không thể can thiệp khi khẩn cấp. Trong tình huống nguy hiểm đến tính mạng, hãy gọi <strong>115</strong>, Tổng đài Bảo vệ Trẻ em <strong>111</strong>, hoặc đường dây hỗ trợ tâm lý.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">4. Độ tuổi</h2>
+        <p>Người dưới 18 tuổi nên sử dụng dịch vụ với sự đồng hành của cha mẹ hoặc người giám hộ. Một số nội dung có thể không phù hợp với trẻ nhỏ.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">5. Trách nhiệm người dùng</h2>
+        <ul class="mt-2 space-y-1.5">
+          <li class="flex gap-2"><span class="text-sage-500 mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Cung cấp thông tin trung thực khi đăng ký (nếu có).</li>
+          <li class="flex gap-2"><span class="text-sage-500 mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Giữ bí mật thông tin đăng nhập của mình.</li>
+          <li class="flex gap-2"><span class="text-sage-500 mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Không đăng nội dung gây hại, kích động tự tử, quấy rối hay vi phạm pháp luật lên mục Cộng đồng.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">6. Nội dung cộng đồng</h2>
+        <p>Mọi bài đăng cộng đồng đều được <strong>kiểm duyệt trước khi hiển thị</strong>. Chúng tôi có quyền từ chối hoặc gỡ nội dung không phù hợp. Nội dung do người dùng đăng không phản ánh quan điểm của Lặng.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">7. Giới hạn trách nhiệm</h2>
+        <p>Lặng là dự án phi lợi nhuận, cung cấp dịch vụ "như hiện có". Chúng tôi không chịu trách nhiệm cho các quyết định hoặc hậu quả phát sinh từ việc dựa vào thông tin trên dịch vụ. Hãy luôn tham khảo chuyên gia có chuyên môn.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">8. Thay đổi điều khoản</h2>
+        <p>Điều khoản có thể được cập nhật theo thời gian. Việc tiếp tục sử dụng dịch vụ đồng nghĩa bạn chấp nhận phiên bản mới nhất.</p>
+      </section>
+    }
+
+    @else {
+      <!-- CHÍNH SÁCH BẢO MẬT -->
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">1. Cam kết của chúng tôi</h2>
+        <p>Lặng xử lý dữ liệu sức khỏe tâm lý — loại dữ liệu cá nhân nhạy cảm. Chúng tôi cam kết bảo vệ quyền riêng tư của bạn theo <strong>Nghị định 13/2023/NĐ-CP</strong> về bảo vệ dữ liệu cá nhân.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">2. Dữ liệu chúng tôi thu thập</h2>
+        <ul class="mt-2 space-y-1.5">
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> <span><strong>Tài khoản</strong> (tùy chọn): địa chỉ email và mật khẩu đã mã hóa. Bạn có thể dùng phần lớn tính năng mà không cần đăng ký.</span></li>
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> <span><strong>Dữ liệu sức khỏe</strong>: ghi chép cảm xúc, nhật ký, kết quả đánh giá — chỉ khi bạn chủ động nhập.</span></li>
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> <span><strong>Kế hoạch an toàn</strong>: chỉ lưu trên thiết bị của bạn, không gửi lên máy chủ.</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">3. Cách chúng tôi bảo vệ dữ liệu</h2>
+        <ul class="mt-2 space-y-1.5">
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Nhật ký và ghi chú cảm xúc được <strong>mã hóa AES-256-GCM</strong> trước khi lưu.</li>
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Mật khẩu được băm (bcrypt), không bao giờ lưu dạng thô.</li>
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Ưu tiên lưu cục bộ trên thiết bị (local-first); chỉ đồng bộ máy chủ khi bạn đăng nhập.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">4. Mục đích sử dụng</h2>
+        <p>Dữ liệu chỉ dùng để cung cấp tính năng cho chính bạn (lưu, đồng bộ, hiển thị xu hướng). Chúng tôi <strong>không bán, không chia sẻ, không dùng dữ liệu cá nhân cho quảng cáo</strong>.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">5. Sự kiện khủng hoảng</h2>
+        <p>Khi hệ thống phát hiện dấu hiệu nguy cơ (để hiển thị hỗ trợ kịp thời), chúng tôi chỉ ghi nhận <strong>số liệu tổng hợp ẩn danh</strong> nhằm cải thiện dịch vụ — không lưu danh tính, nội dung hay thông tin nhận dạng.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">6. Quyền của bạn</h2>
+        <ul class="mt-2 space-y-1.5">
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> <strong>Truy cập &amp; tải về</strong> dữ liệu của mình (mục Tài khoản → Tải dữ liệu).</li>
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> <strong>Xóa toàn bộ</strong> dữ liệu bất cứ lúc nào (mục Tài khoản → Xóa dữ liệu).</li>
+          <li class="flex gap-2"><span class="mt-2 w-1.5 h-1.5 rounded-full bg-sage-500 shrink-0"></span> Rút lại sự đồng ý bằng cách ngừng sử dụng và xóa dữ liệu.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">7. Lưu trữ cục bộ</h2>
+        <p>Chúng tôi dùng bộ nhớ trình duyệt (localStorage) để lưu tùy chọn và dữ liệu cục bộ. Bạn có thể xóa bất cứ lúc nào trong cài đặt trình duyệt.</p>
+      </section>
+
+      <section>
+        <h2 class="font-serif text-xl text-ink dark:text-white mb-2">8. Liên hệ</h2>
+        <p>Mọi thắc mắc về quyền riêng tư, vui lòng liên hệ qua kênh hỗ trợ của dự án. Vì là dự án phi lợi nhuận, chúng tôi sẽ phản hồi trong khả năng sớm nhất.</p>
+      </section>
+    }
+  </div>
+
+  <!-- Liên kết chéo -->
+  <div class="mt-10 pt-6 border-t hairline text-[14px]">
+    @if (kind() === 'terms') {
+      <a routerLink="/privacy" class="text-sage-700 dark:text-sage-300 font-medium hover:underline">Xem Chính sách bảo mật →</a>
+    } @else {
+      <a routerLink="/terms" class="text-sage-700 dark:text-sage-300 font-medium hover:underline">Xem Điều khoản sử dụng →</a>
+    }
+  </div>
+</div>

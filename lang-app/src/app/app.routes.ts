@@ -99,5 +99,17 @@ export const routes: Routes = [
     data: { description: 'Quản trị bài viết và cơ sở hỗ trợ.' },
     loadComponent: () => import('./features/admin/content.component').then(m => m.AdminContentComponent),
   },
+  {
+    path: 'terms',
+    title: 'Điều khoản sử dụng' + SUFFIX,
+    data: { kind: 'terms', description: 'Điều khoản sử dụng dịch vụ Lặng.' },
+    loadComponent: () => import('./features/legal/legal.component').then(m => m.LegalComponent),
+  },
+  {
+    path: 'privacy',
+    title: 'Chính sách bảo mật' + SUFFIX,
+    data: { kind: 'privacy', description: 'Chính sách bảo mật & xử lý dữ liệu cá nhân của Lặng.' },
+    loadComponent: () => import('./features/legal/legal.component').then(m => m.LegalComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

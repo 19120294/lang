@@ -31,14 +31,25 @@ export class ArticleComponent implements OnInit {
   readonly notFound = signal(false);
 
   ngOnInit(): void {
-    const param = this.route.snapshot.paramMap.get('id') ?? '';
-    this.api.getBySlug(param).subscribe({
-      next: art => {
-        if (art) { this.article.set(art); this.loadRelated(art); }
-        else this.fallbackStatic(param);
-      },
-      error: () => this.fallbackStatic(param),
+    // Theo dõi param: khi bấm sang bài liên quan (cùng component), router không
+    // tạo lại component → phải nghe paramMap để tải lại bài mới.
+    this.route.paramMap.subscribe(pm => {
+      const param = pm.get('id') ?? '';
+      this.notFound.set(false);
+      this.article.set(null);
+      this.related.set([]);
+      this.api.getBySlug(param).subscribe({
+        next: art => {
+          if (art) { this.article.set(art); this.loadRelated(art); this.scrollTop(); }
+          else this.fallbackStatic(param);
+        },
+        error: () => this.fallbackStatic(param),
+      });
     });
+  }
+
+  private scrollTop(): void {
+    if (typeof window !== 'undefined' && window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   private fallbackStatic(param: string): void {
@@ -46,6 +57,7 @@ export class ArticleComponent implements OnInit {
     if (!art) { this.notFound.set(true); return; }
     this.article.set(art);
     this.related.set(ARTICLES.filter(a => a.id !== art.id && a.category === art.category).slice(0, 3));
+    this.scrollTop();
   }
 
   private loadRelated(art: Article): void {
