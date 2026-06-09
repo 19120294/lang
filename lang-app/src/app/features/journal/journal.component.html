@@ -1,0 +1,114 @@
+<div class="max-w-3xl mx-auto px-5 sm:px-8 py-12">
+
+  <div class="flex items-end justify-between flex-wrap gap-4 fade-up">
+    <div>
+      <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-3">Không gian của tôi</p>
+      <h1 class="font-serif text-4xl sm:text-5xl text-ink dark:text-white">Nhật ký của tôi</h1>
+    </div>
+    <button (click)="openNew()"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sage-700 text-white font-medium text-[14px] hover:bg-sage-800 transition">
+      <lucide-icon [img]="Plus" class="w-4 h-4" /> Viết mới
+    </button>
+  </div>
+  <p class="mt-4 inline-flex items-center gap-2 text-[13px] text-sage-600 dark:text-stone-300">
+    <lucide-icon [img]="Lock" class="w-4 h-4" /> Lưu riêng tư trên thiết bị (local-first) — không gửi lên máy chủ.
+  </p>
+
+  <!-- Composer -->
+  @if (composerOpen()) {
+    <div class="mt-8 bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-lift)] p-6 fade-up">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-serif text-lg text-ink dark:text-white">
+          {{ editingId() ? 'Chỉnh sửa trang' : 'Trang mới' }}
+        </h2>
+        <button (click)="composerOpen.set(false)" class="grid place-items-center w-8 h-8 rounded-full hover:bg-stone-100 dark:hover:bg-sage-700 transition text-sage-500">
+          <lucide-icon [img]="X" class="w-4 h-4" />
+        </button>
+      </div>
+
+      <!-- Mood picker -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-[13px] text-sage-600 dark:text-stone-300 mr-1">Cảm xúc:</span>
+        @for (m of moodOptions; track m.level) {
+          <button (click)="draftMood.set(m.level)"
+                  [attr.aria-label]="MOOD_META[m.level].label"
+                  [attr.aria-pressed]="draftMood() === m.level"
+                  [attr.data-tip]="MOOD_META[m.level].label"
+                  class="tip grid place-items-center w-9 h-9 rounded-full transition hover:scale-110"
+                  [class]="MOOD_META[m.level].colorClass"
+                  [class.ring-2]="draftMood() === m.level"
+                  [class.ring-sage-600]="draftMood() === m.level">
+            <lucide-icon [img]="m.icon" class="w-[18px] h-[18px]" />
+          </button>
+        }
+        @if (draftMood()) {
+          <button (click)="draftMood.set(null)" class="text-[12px] text-sage-500 hover:text-sage-700 ml-1">Bỏ chọn</button>
+        }
+      </div>
+
+      <textarea rows="6"
+                [value]="draft()"
+                (input)="draft.set($any($event.target).value)"
+                placeholder="Viết ra những gì đang trong lòng bạn…"
+                class="w-full px-4 py-3 rounded-lg bg-stone-50 dark:bg-sage-700 border hairline text-ink dark:text-white placeholder:text-sage-400 focus:border-sage-500 transition resize-none"></textarea>
+
+      <div class="mt-4 flex justify-end gap-3">
+        <button (click)="composerOpen.set(false)"
+                class="px-5 py-2.5 rounded-lg border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-sage-700 transition">
+          Hủy
+        </button>
+        <button (click)="saveEntry()"
+                [disabled]="!draft().trim()"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[14px] font-medium transition disabled:opacity-40"
+                [class.bg-sage-700]="!saved()" [class.text-white]="!saved()" [class.hover:bg-sage-800]="!saved()"
+                [class.bg-sage-100]="saved()" [class.text-sage-700]="saved()">
+          @if (saved()) {
+            <lucide-icon [img]="Check" class="w-4 h-4" /> Đã lưu
+          } @else {
+            <lucide-icon [img]="Save" class="w-4 h-4" /> Lưu
+          }
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Entries -->
+  <div class="mt-10 space-y-4">
+    <h2 class="font-serif text-xl text-ink dark:text-white">Các trang đã viết</h2>
+
+    @if (entries().length === 0) {
+      <div class="text-center py-16 text-sage-500 dark:text-stone-300">
+        <p class="font-serif text-xl mb-2">Chưa có trang nào</p>
+        <p class="text-[14px]">Bấm "Viết mới" để bắt đầu ghi lại những khoảnh khắc của bạn.</p>
+      </div>
+    } @else {
+      @for (entry of entries(); track entry.id) {
+        <article class="bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6">
+          <div class="flex items-start gap-3">
+            @if (entry.mood) {
+              <span class="grid place-items-center w-10 h-10 rounded-full shrink-0" [class]="MOOD_META[entry.mood].colorClass">
+                <lucide-icon [img]="moodIcon(entry.mood)" class="w-5 h-5" />
+              </span>
+            }
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-ink dark:text-white text-[15px]">{{ formatDate(entry.date) }}</p>
+              <p class="text-[12px] text-sage-500 mt-0.5">
+                @if (entry.mood) { {{ MOOD_META[entry.mood].label }} · }
+                {{ entry.updatedAt !== entry.createdAt ? 'Đã chỉnh sửa' : '' }}
+              </p>
+              <p class="mt-3 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed line-clamp-4">{{ entry.content }}</p>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button (click)="openEdit(entry)" class="grid place-items-center w-8 h-8 rounded-lg hover:bg-stone-100 dark:hover:bg-sage-700 transition text-sage-400" aria-label="Sửa">
+                <lucide-icon [img]="Pencil" class="w-4 h-4" />
+              </button>
+              <button (click)="deleteEntry(entry.id)" class="grid place-items-center w-8 h-8 rounded-lg hover:bg-sos-50 dark:hover:bg-sos-900/30 transition text-sage-400 hover:text-sos-600" aria-label="Xóa">
+                <lucide-icon [img]="Trash2" class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    }
+  </div>
+</div>

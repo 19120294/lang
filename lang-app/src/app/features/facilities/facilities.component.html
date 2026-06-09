@@ -1,0 +1,136 @@
+<div class="max-w-6xl mx-auto px-5 sm:px-8 py-12">
+
+  <!-- Header -->
+  <div class="max-w-2xl fade-up">
+    <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-4">Hỗ trợ chuyên môn</p>
+    <h1 class="font-serif text-4xl sm:text-5xl text-ink dark:text-white">Tìm cơ sở hỗ trợ</h1>
+    <p class="mt-5 text-lg text-sage-800 dark:text-stone-200 leading-relaxed">
+      Danh sách cơ sở tư vấn và điều trị tâm lý tại Việt Nam. Ưu tiên cơ sở đã xác minh.
+    </p>
+    <p class="mt-3 inline-flex items-center gap-2 text-[13px] text-sos-600 dark:text-sos-300">
+      <lucide-icon [img]="AlertTriangle" class="w-4 h-4 shrink-0" />
+      Một số thông tin có thể thay đổi — luôn xác nhận lại trước khi đến.
+    </p>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="mt-10 bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-5">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <!-- Search -->
+      <div class="relative flex-1">
+        <lucide-icon [img]="Search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-400 pointer-events-none" />
+        <input type="search" [value]="query()" (input)="onSearch($event)" placeholder="Tìm tên, địa chỉ, chuyên khoa…"
+               class="w-full appearance-none pl-12 pr-4 py-3 rounded-lg bg-stone-50 dark:bg-sage-800 border hairline text-ink dark:text-white placeholder:text-sage-400 focus:border-sage-500 transition" />
+      </div>
+      <!-- Area -->
+      <div class="relative sm:w-44">
+        <lucide-icon [img]="MapPin" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-500 pointer-events-none" />
+        <select (change)="onArea($event)"
+                class="w-full appearance-none pl-12 pr-9 py-3 rounded-lg bg-stone-50 dark:bg-sage-800 border hairline text-ink dark:text-white cursor-pointer">
+          <option value="">Khu vực</option>
+          @for (a of areas; track a[0]) { <option [value]="a[0]">{{ a[1] }}</option> }
+        </select>
+        <lucide-icon [img]="ChevronDown" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sage-400 pointer-events-none" />
+      </div>
+      <!-- Cost -->
+      <div class="relative sm:w-40">
+        <lucide-icon [img]="Wallet" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-500 pointer-events-none" />
+        <select (change)="onCost($event)"
+                class="w-full appearance-none pl-12 pr-9 py-3 rounded-lg bg-stone-50 dark:bg-sage-800 border hairline text-ink dark:text-white cursor-pointer">
+          <option value="">Chi phí</option>
+          @for (c of costs; track c[0]) { <option [value]="c[0]">{{ c[1] }}</option> }
+        </select>
+        <lucide-icon [img]="ChevronDown" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sage-400 pointer-events-none" />
+      </div>
+      <!-- Type -->
+      <div class="relative sm:w-44">
+        <lucide-icon [img]="Stethoscope" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-500 pointer-events-none" />
+        <select (change)="onType($event)"
+                class="w-full appearance-none pl-12 pr-9 py-3 rounded-lg bg-stone-50 dark:bg-sage-800 border hairline text-ink dark:text-white cursor-pointer">
+          <option value="">Hình thức</option>
+          @for (t of types; track t[0]) { <option [value]="t[0]">{{ t[1] }}</option> }
+        </select>
+        <lucide-icon [img]="ChevronDown" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sage-400 pointer-events-none" />
+      </div>
+    </div>
+    <div class="mt-3 flex items-center justify-between">
+      <p class="text-[13px] text-sage-500 dark:text-stone-400">{{ filtered().length }} cơ sở</p>
+      @if (filterArea() || filterCost() || filterType() || query()) {
+        <button (click)="reset()" class="text-[13px] text-sage-700 dark:text-sage-300 font-medium hover:underline">Xóa bộ lọc</button>
+      }
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="mt-8 space-y-4">
+    @for (f of filtered(); track f.id) {
+      <article class="bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6 hover:shadow-[var(--shadow-lift)] transition-shadow">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div class="flex-1 min-w-0">
+            <!-- Name + verified -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="font-serif text-xl text-ink dark:text-white">{{ f.name }}</h2>
+              @if (f.verified) {
+                <span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-sage-50 dark:bg-sage-800 text-sage-600 dark:text-sage-300 shrink-0">
+                  <lucide-icon [img]="BadgeCheck" class="w-3 h-3" /> Đã xác minh
+                </span>
+              } @else {
+                <span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-sos-50 dark:bg-sos-900/30 text-sos-600 dark:text-sos-300 shrink-0">
+                  <lucide-icon [img]="AlertTriangle" class="w-3 h-3" /> Cần xác nhận
+                </span>
+              }
+            </div>
+            <p class="mt-2 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">{{ f.description }}</p>
+
+            <!-- Tags -->
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              @for (t of f.type; track t) {
+                <span class="px-2.5 py-0.5 rounded-full bg-sage-100 dark:bg-sage-800 text-[11px] text-sage-700 dark:text-stone-300 font-medium">{{ TYPE_LABELS[t] }}</span>
+              }
+              @for (c of f.cost; track c) {
+                <span class="px-2.5 py-0.5 rounded-full bg-stone-100 dark:bg-sage-800 text-[11px] text-stone-700 dark:text-stone-300">{{ COST_LABELS[c] }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Contact info -->
+          <div class="flex flex-col gap-2 shrink-0 min-w-[180px]">
+            @if (f.address) {
+              <p class="flex items-start gap-2 text-[13px] text-sage-700 dark:text-stone-300">
+                <lucide-icon [img]="MapPin" class="w-4 h-4 shrink-0 mt-0.5 text-sage-500" /> {{ f.address }}
+              </p>
+              <a [href]="mapsLink(f)" target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center gap-1.5 text-[13px] text-sage-700 dark:text-sage-300 font-medium hover:text-sage-600 transition">
+                <lucide-icon [img]="MapPin" class="w-4 h-4 text-sage-500" /> Xem trên Google Maps
+                <lucide-icon [img]="ExternalLink" class="w-3 h-3" />
+              </a>
+            }
+            <p class="flex items-center gap-2 text-[13px] text-sage-700 dark:text-stone-300">
+              <lucide-icon [img]="Clock" class="w-4 h-4 shrink-0 text-sage-500" /> {{ f.hours }}
+            </p>
+            @if (f.phone) {
+              <a [href]="phoneHref(f.phone)"
+                 class="flex items-center gap-2 text-[13px] text-sage-700 dark:text-sage-300 font-medium hover:text-sage-600 transition">
+                <lucide-icon [img]="Phone" class="w-4 h-4 text-sage-500" /> {{ f.phone }}
+              </a>
+            }
+            @if (f.website && !f.website.includes('VERIFY')) {
+              <a [href]="f.website" target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center gap-1.5 text-[13px] text-sage-700 dark:text-sage-300 font-medium hover:text-sage-600 transition">
+                <lucide-icon [img]="Globe" class="w-4 h-4" /> Website <lucide-icon [img]="ExternalLink" class="w-3 h-3" />
+              </a>
+            }
+          </div>
+        </div>
+      </article>
+    }
+
+    @empty {
+      <div class="text-center py-16 text-sage-500 dark:text-stone-400">
+        <p class="font-serif text-xl mb-2">Không tìm thấy kết quả</p>
+        <p class="text-[14px]">Thử bỏ bộ lọc hoặc tìm với từ khóa khác.</p>
+        <button (click)="reset()" class="mt-4 text-sage-700 dark:text-sage-300 font-medium text-[14px] hover:underline">Xem tất cả</button>
+      </div>
+    }
+  </div>
+</div>

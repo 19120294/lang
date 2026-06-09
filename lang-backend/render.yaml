@@ -1,0 +1,18 @@
+# Cấu hình deploy backend trên Render (https://render.com)
+services:
+  - type: web
+    name: lang-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # dán chuỗi kết nối Neon/Supabase trong dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        sync: false          # tạo bằng: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+      - key: FRONTEND_URL
+        sync: false          # domain Vercel của bạn, vd https://lang.vercel.app
+      - key: PORT
+        value: 3001

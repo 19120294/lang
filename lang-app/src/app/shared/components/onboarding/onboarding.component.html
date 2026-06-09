@@ -1,0 +1,92 @@
+@if (visible()) {
+  <div role="dialog" aria-modal="true" aria-labelledby="ob-title"
+       class="fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-sage-900/60 backdrop-blur-sm"></div>
+
+    <div class="relative w-full max-w-lg bg-white dark:bg-sage-800 rounded-2xl shadow-[var(--shadow-lift)] p-8 fade-up">
+
+    @if (phase() === 'slides') {
+      <!-- Skip -->
+      <button (click)="skip()" aria-label="Bỏ qua"
+              class="absolute top-4 right-4 grid place-items-center w-9 h-9 rounded-full hover:bg-stone-100 dark:hover:bg-sage-700 transition text-sage-500">
+        <lucide-icon [img]="X" class="w-5 h-5" />
+      </button>
+
+      @let slide = slides[step()];
+
+      <!-- Icon -->
+      <span class="inline-grid place-items-center w-16 h-16 rounded-2xl mb-6" [class]="slide.accent">
+        <lucide-icon [img]="slide.icon" class="w-8 h-8" />
+      </span>
+
+      <h2 id="ob-title" class="font-serif text-2xl sm:text-3xl text-ink dark:text-white">{{ slide.title }}</h2>
+      <p class="mt-4 text-[15px] text-sage-700 dark:text-stone-300 leading-relaxed">{{ slide.body }}</p>
+
+      <!-- Dots -->
+      <div class="mt-8 flex items-center gap-2">
+        @for (s of slides; track $index) {
+          <span class="h-1.5 rounded-full transition-all"
+                [class.w-6]="$index === step()" [class.bg-sage-600]="$index === step()"
+                [class.w-1.5]="$index !== step()" [class.bg-stone-300]="$index !== step()"
+                [class.dark:bg-sage-600]="$index !== step()"></span>
+        }
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-8 flex items-center justify-between">
+        @if (step() > 0) {
+          <button (click)="prev()" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[14px] text-sage-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-sage-700 transition">
+            <lucide-icon [img]="ArrowLeft" class="w-4 h-4" /> Trước
+          </button>
+        } @else {
+          <button (click)="skip()" class="px-4 py-2.5 rounded-lg text-[14px] text-sage-500 hover:text-sage-700 transition">Bỏ qua</button>
+        }
+
+        <button (click)="next()"
+                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-sage-700 text-white text-[14px] font-medium hover:bg-sage-800 transition">
+          {{ step() === slides.length - 1 ? 'Tiếp tục' : 'Tiếp tục' }}
+          <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+        </button>
+      </div>
+    }
+
+    @else if (phase() === 'age') {
+      <span class="inline-grid place-items-center w-16 h-16 rounded-2xl mb-6 bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200">
+        <lucide-icon [img]="Users" class="w-8 h-8" />
+      </span>
+      <h2 class="font-serif text-2xl sm:text-3xl text-ink dark:text-white">Bạn bao nhiêu tuổi?</h2>
+      <p class="mt-4 text-[15px] text-sage-700 dark:text-stone-300 leading-relaxed">
+        Thông tin này giúp chúng tôi đưa ra hỗ trợ phù hợp và an toàn hơn cho bạn. Bạn vẫn dùng được mọi tính năng.
+      </p>
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button (click)="confirmAge(true)"
+                class="px-6 py-4 rounded-xl border-2 border-stone-200 dark:border-sage-700 hover:border-sage-500 text-ink dark:text-white font-medium transition">
+          Từ 18 tuổi trở lên
+        </button>
+        <button (click)="confirmAge(false)"
+                class="px-6 py-4 rounded-xl border-2 border-stone-200 dark:border-sage-700 hover:border-sage-500 text-ink dark:text-white font-medium transition">
+          Dưới 18 tuổi
+        </button>
+      </div>
+    }
+
+    @else {
+      <span class="inline-grid place-items-center w-16 h-16 rounded-2xl mb-6 bg-sos-100 dark:bg-sos-900/40 text-sos-600 dark:text-sos-300">
+        <lucide-icon [img]="HeartHandshake" class="w-8 h-8" />
+      </span>
+      <h2 class="font-serif text-2xl sm:text-3xl text-ink dark:text-white">Bạn không hề đơn độc 💚</h2>
+      <p class="mt-4 text-[15px] text-sage-700 dark:text-stone-300 leading-relaxed">
+        Cảm ơn bạn đã tin tưởng Lặng. Nếu đang gặp khó khăn, hãy thử chia sẻ với <strong>cha mẹ, thầy cô hoặc một người lớn mà bạn tin cậy</strong> — họ có thể giúp bạn nhiều hơn bạn nghĩ.
+      </p>
+      <div class="mt-4 p-4 rounded-xl bg-sage-50 dark:bg-sage-700/50 border hairline text-[14px] text-sage-700 dark:text-stone-200 leading-relaxed">
+        Tổng đài Quốc gia Bảo vệ Trẻ em: <strong>111</strong> (miễn phí, 24/7). Khi nguy hiểm tức thời, gọi <strong>115</strong>.
+      </div>
+      <button (click)="finishMinor()"
+              class="mt-8 w-full inline-flex justify-center items-center gap-2 px-6 py-3 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 transition">
+        Mình đã hiểu, bắt đầu
+      </button>
+    }
+
+    </div>
+  </div>
+}

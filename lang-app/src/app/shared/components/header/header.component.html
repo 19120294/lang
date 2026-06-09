@@ -1,0 +1,135 @@
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-3 focus:left-3 focus:bg-white focus:text-sage-700 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-card">
+  Bỏ qua tới nội dung chính
+</a>
+
+<header class="sticky top-0 z-40 backdrop-blur-md bg-stone-50/80 dark:bg-sage-900/80 border-b hairline transition-colors">
+  <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between"
+       aria-label="Điều hướng chính">
+
+    <!-- Logo -->
+    <a routerLink="/" class="flex items-center gap-2.5 shrink-0">
+      <span class="grid place-items-center w-8 h-8 rounded-md border border-sage-600 dark:border-sage-300">
+        <span class="w-2.5 h-2.5 rounded-full bg-sage-600 dark:bg-sage-300"></span>
+      </span>
+      <span class="font-serif text-xl font-semibold text-ink dark:text-white">Lặng</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden lg:flex items-center gap-6 text-[14px] text-sage-700 dark:text-stone-200">
+      @for (link of navLinks; track link.path) {
+        <a [routerLink]="link.path"
+           routerLinkActive="text-ink dark:text-white font-medium"
+           class="hover:text-sage-500 transition">
+          {{ link.label }}
+        </a>
+      }
+
+      <!-- Dropdown: Tự chăm sóc -->
+      <div class="relative">
+        <button (click)="toggleSelfCare()"
+                [attr.aria-expanded]="selfCareOpen()"
+                aria-haspopup="true"
+                class="inline-flex items-center gap-1 hover:text-sage-500 transition">
+          Tự chăm sóc
+          <lucide-icon [img]="ChevronDown" class="w-4 h-4 transition-transform" [class.rotate-180]="selfCareOpen()" />
+        </button>
+
+        @if (selfCareOpen()) {
+          <div class="absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-white dark:bg-sage-800 rounded-xl border hairline shadow-[var(--shadow-lift)] p-2 fade-up"
+               role="menu">
+            @for (s of selfCareLinks; track s.path) {
+              <a [routerLink]="s.path" (click)="closeSelfCare()"
+                 routerLinkActive="bg-sage-50 dark:bg-sage-700"
+                 role="menuitem"
+                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-stone-100 dark:hover:bg-sage-700 transition group">
+                <span class="grid place-items-center w-9 h-9 rounded-lg bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200 shrink-0">
+                  <lucide-icon [img]="s.icon" class="w-[18px] h-[18px]" />
+                </span>
+                <span class="min-w-0">
+                  <span class="block text-[14px] font-medium text-ink dark:text-white">{{ s.label }}</span>
+                  <span class="block text-[12px] text-sage-500">{{ s.desc }}</span>
+                </span>
+              </a>
+            }
+          </div>
+        }
+      </div>
+
+      @for (link of endLinks; track link.path) {
+        <a [routerLink]="link.path"
+           routerLinkActive="text-ink dark:text-white font-medium"
+           class="hover:text-sage-500 transition">
+          {{ link.label }}
+        </a>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2">
+      <button (click)="toggleTheme()"
+              aria-label="Chuyển chế độ sáng/tối"
+              class="grid place-items-center w-10 h-10 rounded-lg border hairline hover:bg-stone-100 dark:hover:bg-sage-800 transition text-sage-700 dark:text-stone-200">
+        @if (isDark()) {
+          <lucide-icon [img]="Moon" class="w-[18px] h-[18px]" />
+        } @else {
+          <lucide-icon [img]="Sun" class="w-[18px] h-[18px]" />
+        }
+      </button>
+      @if (isLoggedIn()) {
+        <a routerLink="/account"
+           class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border hairline text-sage-700 dark:text-stone-200 text-[14px] font-medium hover:bg-stone-100 dark:hover:bg-sage-800 transition">
+          <lucide-icon [img]="UserRound" class="w-4 h-4" /> Tài khoản
+        </a>
+      } @else {
+        <a routerLink="/auth"
+           class="hidden sm:inline-flex items-center px-4 py-2.5 rounded-lg bg-sage-700 text-white text-[14px] font-medium hover:bg-sage-800 transition">
+          Đăng nhập
+        </a>
+      }
+      <!-- Mobile menu toggle -->
+      <button (click)="toggleMobile()"
+              [attr.aria-expanded]="mobileOpen()"
+              aria-label="Mở menu"
+              class="lg:hidden grid place-items-center w-10 h-10 rounded-lg border hairline hover:bg-stone-100 dark:hover:bg-sage-800 transition text-sage-700 dark:text-stone-200">
+        @if (mobileOpen()) {
+          <lucide-icon [img]="X" class="w-5 h-5" />
+        } @else {
+          <lucide-icon [img]="Menu" class="w-5 h-5" />
+        }
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  @if (mobileOpen()) {
+    <div class="lg:hidden border-t hairline bg-stone-50 dark:bg-sage-900 px-5 py-4 space-y-1">
+      @for (link of navLinks; track link.path) {
+        <a [routerLink]="link.path"
+           routerLinkActive="bg-sage-100 dark:bg-sage-800 text-ink dark:text-white font-medium"
+           (click)="closeMobile()"
+           class="block px-4 py-2.5 rounded-lg text-[15px] text-sage-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-sage-800 transition">
+          {{ link.label }}
+        </a>
+      }
+
+      <!-- Nhóm Tự chăm sóc -->
+      <p class="px-4 pt-3 pb-1 text-[12px] uppercase tracking-wide text-sage-400 font-medium">Tự chăm sóc</p>
+      @for (s of selfCareLinks; track s.path) {
+        <a [routerLink]="s.path" (click)="closeMobile()"
+           routerLinkActive="bg-sage-100 dark:bg-sage-800 text-ink dark:text-white font-medium"
+           class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[15px] text-sage-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-sage-800 transition">
+          <lucide-icon [img]="s.icon" class="w-[18px] h-[18px] text-sage-500" /> {{ s.label }}
+        </a>
+      }
+
+      <p class="px-4 pt-3 pb-1 text-[12px] uppercase tracking-wide text-sage-400 font-medium">Khác</p>
+      @for (link of endLinks; track link.path) {
+        <a [routerLink]="link.path" (click)="closeMobile()"
+           routerLinkActive="bg-sage-100 dark:bg-sage-800 text-ink dark:text-white font-medium"
+           class="block px-4 py-2.5 rounded-lg text-[15px] text-sage-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-sage-800 transition">
+          {{ link.label }}
+        </a>
+      }
+    </div>
+  }
+</header>

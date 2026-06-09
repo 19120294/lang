@@ -1,0 +1,48 @@
+<footer class="bg-sage-900 dark:bg-sage-950 text-stone-200 mt-4">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div>
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="grid place-items-center w-8 h-8 rounded-md border border-sage-300">
+          <span class="w-2.5 h-2.5 rounded-full bg-sage-300"></span>
+        </span>
+        <span class="font-serif text-xl text-white">Lặng</span>
+      </div>
+      <p class="text-[14px] text-stone-400 leading-relaxed">Một khoảng lặng để bạn lắng nghe chính mình.</p>
+    </div>
+
+    <div>
+      <h4 class="font-medium mb-4 text-[14px]">Khám phá</h4>
+      <ul class="space-y-2.5 text-[14px] text-stone-400">
+        <li><a routerLink="/assessment"  class="hover:text-white transition">Đánh giá</a></li>
+        <li><a routerLink="/knowledge"   class="hover:text-white transition">Tra cứu</a></li>
+        <li><a routerLink="/books"       class="hover:text-white transition">Thư viện sách</a></li>
+        <li><a routerLink="/community"   class="hover:text-white transition">Cộng đồng</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-medium mb-4 text-[14px]">Không gian của tôi</h4>
+      <ul class="space-y-2.5 text-[14px] text-stone-400">
+        <li><a routerLink="/mood"        class="hover:text-white transition">Cảm xúc</a></li>
+        <li><a routerLink="/journal"     class="hover:text-white transition">Nhật ký</a></li>
+        <li><a routerLink="/breathe"     class="hover:text-white transition">Bài tập thở</a></li>
+        <li><a routerLink="/facilities"  class="hover:text-white transition">Cơ sở hỗ trợ</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-medium mb-4 text-[14px]">Quyền riêng tư</h4>
+      <ul class="space-y-2.5 text-[14px] text-stone-400">
+        <li><a routerLink="/privacy"     class="hover:text-white transition">Chính sách dữ liệu</a></li>
+        <li><a routerLink="/delete-data" class="hover:text-white transition">Xóa dữ liệu của tôi</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-sage-800">
+    <p class="max-w-6xl mx-auto px-5 sm:px-8 py-5 text-[12px] text-stone-400 leading-relaxed">
+      <strong class="text-stone-200">Tuyên bố từ chối trách nhiệm:</strong> {{ disclaimer }}
+      Nếu bạn đang gặp khủng hoảng, hãy bấm <span class="text-sos-300 font-medium">Cần hỗ trợ ngay</span> hoặc gọi <strong class="text-white">115</strong>.
+    </p>
+  </div>
+</footer>

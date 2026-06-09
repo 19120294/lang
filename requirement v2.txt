@@ -1,0 +1,178 @@
+# Requirement v2 — Website Cẩm nang Hỗ trợ & Tra cứu Sức khỏe Tâm lý
+
+> Bản cải tiến từ requirement gốc. Bổ sung: An toàn & leo thang khủng hoảng, Quyền riêng tư & tuân thủ pháp luật, Accessibility, Mô-đun Tra cứu/Knowledge base, spec chấm điểm thang đo, phân kỳ MVP, và hoàn thiện phần Output.
+> ⚠️ Đây là sản phẩm trong lĩnh vực nhạy cảm cao (sức khỏe tâm thần, có yếu tố tự tử). **An toàn người dùng được ưu tiên trên thẩm mỹ và mọi tính năng khác.**
+
+---
+
+## 0. BỐI CẢNH & NGUYÊN TẮC NỀN TẢNG
+
+**Bối cảnh:** Xây dựng website cẩm nang hỗ trợ & tra cứu cho người gặp bất ổn/mắc bệnh tâm lý. Rào cản chi phí, thời gian và định kiến xã hội khiến nhiều người tự chịu đựng thay vì tìm chuyên gia. Website là một "bước đệm" an toàn, tinh tế, giúp họ hiểu bản thân và bớt lạc lõng.
+
+**Vai trò khi thực thi:** Chuyên gia UI/UX Senior + Full-stack Developer.
+
+**Nguyên tắc bất biến (non-negotiable principles):**
+1. **Safety-first:** mọi luồng phải có đường dẫn nhanh tới hỗ trợ khủng hoảng; phát hiện rủi ro tự hại phải leo thang ngay.
+2. **Không thay thế y khoa:** website chỉ tham khảo, không chẩn đoán, không điều trị.
+3. **Riêng tư là mặc định:** thu thập tối thiểu, mã hóa dữ liệu nhạy cảm, cho phép xóa.
+4. **Không gây hại (do-no-harm):** tránh nội dung/thiết kế có thể kích động lo âu hoặc cổ vũ hành vi tự hại.
+5. **Tiếp cận được cho mọi người (accessibility):** đạt WCAG 2.1 AA tối thiểu.
+
+---
+
+## I. TƯ DUY THIẾT KẾ (DESIGN SYSTEM & VIBE)
+
+- **Phong cách:** Tối giản, hiện đại, tinh tế, "chữa lành", an toàn tuyệt đối. Bo góc mềm (`rounded-2xl`/`rounded-3xl`).
+- **Bảng màu (Color Palette):**
+  - **Sage Green** (xanh xô thơm) — màu chủ đạo (sinh trưởng, an tâm).
+  - **Muted Blue** (xanh dương dịu) — màu nhấn phụ (tin cậy, bình yên).
+  - **Nền:** Pastel nhẹ / Beige / Off-white.
+  - **Dark Mode** dịu mắt cho ban đêm.
+  - ⚠️ **Ràng buộc tương phản (BẮT BUỘC):** mọi cặp màu chữ/nền phải đạt **WCAG AA** (≥ 4.5:1 cho text thường, ≥ 3:1 cho text lớn & thành phần UI). Sage-on-beige rất dễ trượt chuẩn → **phải kiểm tra contrast ratio cho từng token màu ở cả Light & Dark Mode**. Định nghĩa một bộ "text color" đậm hơn dành riêng cho nội dung đọc, tách khỏi màu trang trí.
+- **Hiệu ứng (Animations):**
+  - Chuyển động mượt (smooth transition, fade-in), không pop-up gây giật mình.
+  - **BẮT BUỘC** tôn trọng `prefers-reduced-motion` → tắt/giảm animation khi người dùng yêu cầu.
+- **Typography:** chữ đủ lớn (cơ sở ≥ 16px), line-height thoáng, dễ đọc khi mệt mỏi/lo âu.
+
+---
+
+## II. AN TOÀN NGƯỜI DÙNG & LEO THANG KHỦNG HOẢNG (CHƯƠNG MỚI — ƯU TIÊN CAO NHẤT) 🔴
+
+> Đây là phần bổ sung quan trọng nhất so với requirement gốc.
+
+### 2.1. Nút cứu trợ khẩn cấp (SOS Button) — BẮT BUỘC
+- **Thiết kế:** ghim cố định (Sticky). Màu nổi bật nhưng không gây hoảng (Soft Red / Coral).
+- **Vị trí & chống xung đột:** vì Chatbot cũng nằm góc phải-dưới → **định nghĩa layout rõ để SOS và Chatbot KHÔNG đè nhau** trên mobile. Quy ước đề xuất: **SOS góc phải-dưới (ưu tiên cao nhất, luôn nổi trên cùng `z-index`)**, Chatbot lùi lên trên hoặc thu thành bubble nhỏ hơn; SOS không bao giờ bị che.
+- **Khi Click:** Modal/Card tinh tế chứa **số hotline khủng hoảng/tự tử miễn phí** + thông điệp ấm áp: *"Bạn không cô đơn, luôn có người sẵn sàng lắng nghe bạn."*
+- **Nội dung hotline:**
+  - ⚠️ **Mọi số hotline phải được xác minh còn hoạt động & chính xác trước khi phát hành** (ví dụ tham khảo: dự án "Ngày Mai", "MindCare" — cần kiểm chứng số & giờ hoạt động).
+  - 🚩 **BLOCKER Phase 1:** danh sách hotline thực tế phải được điền vào một **file cấu hình tập trung** (vd `hotlines.config.ts`), KHÔNG hardcode rải rác. Cần **người chịu trách nhiệm verify** ký xác nhận trước release. Khởi tạo bằng placeholder rõ ràng (`[CẦN VERIFY]`) để không bị quên.
+  - Bổ sung **115 (cấp cứu y tế)** cho tình huống nguy hiểm tức thời.
+  - Hiển thị **giờ hoạt động** của từng đường dây; nếu ngoài giờ → gợi ý kênh thay thế.
+  - Nút **gọi trực tiếp** (`tel:`) trên mobile.
+
+### 2.2. Phát hiện & leo thang rủi ro tự hại (Crisis Escalation) — BẮT BUỘC
+- **Trong bài test PHQ-9:** câu hỏi số 9 (ý nghĩ về cái chết/tự hại). **Nếu điểm câu 9 > 0 → ngay khi trả kết quả phải hiển thị khối SOS/hotline nổi bật** (bất kể tổng điểm), kèm thông điệp quan tâm. Đây là chuẩn thực hành lâm sàng, không được bỏ qua.
+- **Trong Chatbot AI & Confession Wall:** tích hợp bộ phát hiện tín hiệu nguy cơ (từ khóa/ý định tự tử/tự hại) → **tự động hiện SOS và thông điệp hỗ trợ**, ưu tiên trên mọi phản hồi khác.
+- Ghi log sự kiện leo thang ở mức **ẩn danh/aggregate** để cải tiến (không lưu nội dung nhận dạng cá nhân trừ khi có consent).
+
+### 2.3. Tuyên bố từ chối trách nhiệm (Disclaimer) — BẮT BUỘC
+- **Vị trí:** Footer toàn trang **và** một banner nhỏ **ngay trước khi bắt đầu mỗi bài test**.
+- **Nội dung:** *"Các bài test và thông tin trên website chỉ mang tính chất tham khảo, không có giá trị thay thế chẩn đoán y khoa chuyên môn."*
+
+---
+
+## III. QUYỀN RIÊNG TƯ, DỮ LIỆU & TUÂN THỦ (CHƯƠNG MỚI) 🔐
+
+- **Phân loại dữ liệu:** kết quả test, Journal, Mood tracker là **dữ liệu sức khỏe nhạy cảm** theo **Nghị định 13/2023/NĐ-CP về Bảo vệ dữ liệu cá nhân**.
+- **Yêu cầu tối thiểu:**
+  - **Consent rõ ràng** trước khi thu thập dữ liệu nhạy cảm; giải thích mục đích bằng ngôn ngữ dễ hiểu.
+  - **Mã hóa khi lưu (at rest)** và trên đường truyền (TLS).
+  - **Chính sách lưu trữ & quyền xóa:** người dùng có thể xóa toàn bộ dữ liệu của mình bất cứ lúc nào.
+  - **Thu thập tối thiểu (data minimization):** không yêu cầu thông tin không cần thiết.
+- **Mô hình "ẩn danh" — làm rõ:**
+  - "Ẩn danh hiển thị" (Confession Wall) ≠ "ẩn danh hệ thống". Cần định nghĩa rõ điều nào áp dụng ở đâu.
+  - **Mood tracker/Journal cần lưu trữ theo thời gian** → đề xuất **local-first** (lưu trên thiết bị) cho Journal để tối đa riêng tư; nếu đồng bộ server thì phải mã hóa & có tài khoản.
+- **Mô hình tài khoản (ĐÃ CHỐT — Guest-first):**
+  - **Không bắt buộc đăng nhập** để làm test, tra cứu, hay dùng các công cụ cốt lõi → giảm rào cản & tối đa ẩn danh.
+  - Kết quả test / mood / journal mặc định **lưu local-first trên thiết bị**; không gửi server nếu người dùng không chủ động đăng nhập.
+  - **Đăng nhập là tùy chọn**, chỉ dùng khi người dùng muốn **lưu/đồng bộ lịch sử qua nhiều thiết bị** → khi đó mới có consent + mã hóa + tài khoản (mục yêu cầu tối thiểu ở trên).
+  - Cảnh báo rõ: dữ liệu local sẽ mất nếu xóa trình duyệt → gợi ý đăng nhập/đồng bộ cho ai muốn giữ lâu dài.
+- **Người dùng < 18 tuổi:** xác định chính sách (age-gating / consent người giám hộ / giới hạn tính năng xã hội).
+- **Kiểm duyệt & nội dung chuyên môn:** nội dung lời khuyên/bài viết phải có **chuyên gia lâm sàng review** và **trích dẫn nguồn**.
+
+---
+
+## IV. CÁC TÍNH NĂNG CỐT LÕI
+
+### 4.1. Bài test tâm lý & Trả kết quả
+- **Danh mục (chỉ thang đo chuẩn quốc tế):** **DASS-21** (Trầm cảm/Lo âu/Stress), **PHQ-9** (sàng lọc trầm cảm), **GAD-7** (sàng lọc lo âu). **Tuyệt đối không test vui.**
+- **Spec chấm điểm & ngưỡng (BẮT BUỘC định nghĩa rõ trong code):**
+  - **PHQ-9:** 9 câu, 0–3 điểm/câu, tổng 0–27. Ngưỡng tham khảo: 0–4 tối thiểu, 5–9 nhẹ, 10–14 vừa, 15–19 vừa-nặng, 20–27 nặng. **Câu 9 > 0 → kích hoạt crisis escalation (mục 2.2).**
+  - **GAD-7:** 7 câu, 0–3/câu, tổng 0–21. Ngưỡng: 0–4 tối thiểu, 5–9 nhẹ, 10–14 vừa, 15–21 nặng.
+  - **DASS-21:** 21 câu chia 3 tiểu thang (Depression/Anxiety/Stress), mỗi tiểu thang 7 câu, **điểm nhân 2** theo chuẩn DASS-42. Ngưỡng từng tiểu thang (sau khi đã ×2):
+    - **Depression:** 0–9 Bình thường · 10–13 Nhẹ · 14–20 Vừa · 21–27 Nặng · 28+ Rất nặng.
+    - **Anxiety:** 0–7 Bình thường · 8–9 Nhẹ · 10–14 Vừa · 15–19 Nặng · 20+ Rất nặng.
+    - **Stress:** 0–14 Bình thường · 15–18 Nhẹ · 19–25 Vừa · 26–33 Nặng · 34+ Rất nặng.
+  - Lưu **bản dịch tiếng Việt đã được kiểm định** cho từng thang đo; ghi rõ nguồn.
+- **UI trả kết quả — tinh tế, không phán xét:**
+  - Biểu đồ thanh/tròn mềm mại + text nhẹ nhàng. **Không** dùng câu như *"Bạn bị trầm cảm nặng"*.
+  - Ví dụ tone: *"Kết quả cho thấy bạn đang có dấu hiệu lo âu ở mức độ cao. Đừng lo lắng quá — bạn có thể thử các bài tập thở dưới đây, hoặc cân nhắc trò chuyện cùng chuyên gia để nhẹ lòng hơn nhé."*
+  - Luôn kèm **bước tiếp theo khả thi** (bài tập thở, danh bạ cơ sở, hotline nếu rủi ro cao).
+  - Cho phép **lưu/so sánh kết quả theo thời gian** (tùy chọn, có consent).
+
+### 4.2. Mô-đun Tra cứu / Cẩm nang (Knowledge Base) — BỔ SUNG QUAN TRỌNG
+> Tên dự án nhấn mạnh "tra cứu" nhưng requirement gốc gần như thiếu phần này.
+- **Thư viện kiến thức** về các vấn đề tâm lý (lo âu, trầm cảm, stress, giấc ngủ…): triệu chứng, nguyên nhân, khi nào cần gặp chuyên gia — viết dễ hiểu, không hù dọa.
+- **Chức năng tìm kiếm** (search) với gợi ý từ khóa & lọc theo chủ đề.
+- Nội dung có **chuyên gia review + trích nguồn**; gắn nhãn "tham khảo".
+
+### 4.3. Self-Help Tool (Công cụ tự trợ giúp)
+- **Mood Tracker:** widget/calendar chấm cảm xúc hằng ngày (Vui / Bình thường / Lo âu / Giận dữ / Tệ) bằng emoji tối giản, dễ thương. Xem lại xu hướng theo tuần/tháng.
+- **Journal (Nhật ký số):** ưu tiên **local-first** vì riêng tư (xem mục III).
+- **Thẻ (Cards) bài học/lời khuyên ngắn** để tốt hơn mỗi ngày; bài tập thở có hướng dẫn.
+- **Nhắc nhở (opt-in, nhẹ nhàng):** nhắc ghi mood — chỉ bật khi người dùng đồng ý.
+
+### 4.4. Không gian an toàn / Góc chia sẻ ẩn danh (Safe Space / Confession Wall)
+> ⚠️ **Tính năng rủi ro cao nhất** (nguy cơ lan truyền hành vi tự hại — Werther effect). Đề xuất đưa vào **giai đoạn sau** khi đã có hạ tầng kiểm duyệt.
+- "Bức tường tâm sự": đăng câu chuyện **ẩn danh hiển thị**.
+- Tương tác: "Thả tim", "Gửi cái ôm", bình luận tích cực **đã qua kiểm duyệt**.
+- **Kiểm duyệt bắt buộc nâng cao:**
+  - **Pre-moderation** (duyệt trước khi đăng), không chỉ lọc bình luận.
+  - **Content warning** cho chủ đề nhạy cảm; **chặn mô tả chi tiết phương thức tự hại**.
+  - **SLA xử lý bài nguy cấp** (phát hiện rủi ro → ưu tiên xử lý + hiện SOS cho người đăng).
+  - Nút **báo cáo (report)** cho người dùng.
+
+### 4.5. Bộ lọc cơ sở y tế (Filter)
+- Filter Bar trực quan: **Khu vực** (Gần tôi), **Chi phí** (BHYT / Miễn phí / Bình dân), **Hình thức** (Online video call / Offline tại phòng khám).
+- Mỗi cơ sở: thông tin liên hệ, giờ làm việc, bản đồ; ưu tiên cơ sở đã xác minh.
+
+### 4.6. Tiện ích bổ sung
+- Khu vực **"Lời khuyên từ chuyên gia"** (bài viết, có nguồn & người review).
+- **Chatbot AI** hỗ trợ lắng nghe & định hướng ban đầu (góc phải):
+  - ⚠️ **Tuyệt đối không chẩn đoán/kê đơn/cam kết điều trị.**
+  - Có **disclaimer rõ ràng** và **giới hạn phạm vi**; khi vượt phạm vi hoặc phát hiện rủi ro → **đẩy về hotline/chuyên gia** ngay.
+  - Cân nhắc đưa vào **giai đoạn sau**.
+
+---
+
+## V. ACCESSIBILITY & TRẢI NGHIỆM (CHƯƠNG MỚI)
+- **WCAG 2.1 AA**: tương phản màu, kích thước chạm, focus state rõ.
+- **Keyboard navigation** đầy đủ; **screen reader** (ARIA labels) cho mọi thành phần tương tác, đặc biệt SOS, test, chatbot.
+- **`prefers-reduced-motion`** & **prefers-color-scheme** (dark mode).
+- **Onboarding lần đầu** nhẹ nhàng: giới thiệu mục đích, disclaimer, và vị trí nút SOS.
+- **Mobile-first**, tải nhanh, hoạt động tốt trên mạng yếu.
+
+---
+
+## VI. PHÂN KỲ MVP (đề xuất)
+- **Phase 1 (nền tảng an toàn):** SOS + crisis escalation, Disclaimer, Bài test (DASS-21/PHQ-9/GAD-7) với trả kết quả an toàn, Danh bạ cơ sở + Filter, **Mô-đun Tra cứu/Knowledge base + Search**.
+- **Phase 2 (tự trợ giúp):** Mood Tracker, Journal (local-first), Cards/bài tập thở, Bài viết chuyên gia.
+- **Phase 3 (xã hội — rủi ro cao):** Confession Wall + hệ thống kiểm duyệt, Chatbot AI. Chỉ mở khi hạ tầng moderation & phát hiện rủi ro đã sẵn sàng.
+
+---
+
+## VII. YÊU CẦU ĐẦU RA (OUTPUT REQUIREMENT) — HOÀN THIỆN
+1. **Mô tả kiến trúc UX/UI & User Flow** đảm bảo tính tiếp cận tốt nhất (sơ đồ luồng từ trang chủ → test → kết quả → bước tiếp theo; luồng SOS; luồng leo thang khủng hoảng).
+2. **Design System / Style guide:** tokens màu (kèm **giá trị contrast ratio** đã kiểm), typography, spacing, component bo góc, trạng thái Light/Dark.
+3. **Code trang chủ (Homepage) + luồng chính** bằng **Angular 19 + Tailwind CSS** (stack đã chốt — xem mục VIII).
+4. **Spec hành vi an toàn:** mô tả rõ logic crisis escalation (PHQ-9 Q9, chatbot, wall) và nội dung khối SOS.
+5. **Checklist Accessibility & Privacy** kèm theo (WCAG AA, consent, mã hóa, quyền xóa).
+6. **Ghi chú phân kỳ MVP** cho phần được giao triển khai trước.
+
+---
+
+## VIII. STACK CÔNG NGHỆ (ĐÃ CHỐT) & YÊU CẦU PHI CHỨC NĂNG (NFR)
+
+### 8.1. Stack đã chốt
+- **Frontend:** **Angular 19** (standalone components, SSR/hydration bật để SEO mô-đun Tra cứu & tải nhanh).
+- **Styling:** **Tailwind CSS** — định nghĩa design tokens (màu/spacing/radius) qua `tailwind.config`, kiểm soát contrast WCAG AA chặt chẽ; hỗ trợ dark mode qua `prefers-color-scheme`.
+- **Lý do:** quản lý tốt các luồng tương tác nhiều state (test, crisis escalation, mood tracker), SSR tốt cho nội dung tra cứu, kiểm soát contrast chính xác, và nhất quán nếu tích hợp repo HPC (Angular 19).
+- **Lưu trữ:** local-first (IndexedDB/localStorage) cho dữ liệu nhạy cảm khi chưa đăng nhập (xem mục III).
+
+### 8.2. Yêu cầu phi chức năng (NFR)
+- **Hiệu năng:** LCP < 2.5s và TTI < 3.5s trên 4G tầm trung; tối ưu cho mạng yếu (lazy-load, ảnh nén, code-splitting theo route).
+- **Trình duyệt hỗ trợ:** 2 phiên bản gần nhất của Chrome/Edge/Firefox/Safari; mobile Safari & Chrome Android.
+- **Offline:** mô-đun Mood Tracker & Journal phải hoạt động được offline (local-first); cảnh báo khi mất kết nối với phần cần mạng.
+- **Bảo mật:** TLS bắt buộc; mã hóa at-rest cho dữ liệu nhạy cảm khi đồng bộ server; không log nội dung nhận dạng cá nhân.
+- **Đo lường (privacy-respecting):** chỉ analytics ẩn danh/aggregate; theo dõi các chỉ số an toàn (vd tỉ lệ mở SOS → bấm gọi hotline, tỉ lệ hoàn thành onboarding) mà không gắn danh tính.

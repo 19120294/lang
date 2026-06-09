@@ -1,0 +1,77 @@
+<!-- SOS Sticky Button — z cao nhất, không bao giờ bị che -->
+<button (click)="open()"
+        aria-haspopup="dialog"
+        class="fixed bottom-5 right-5 z-[80] flex items-center gap-2.5 pl-4 pr-5 py-3.5 rounded-full bg-sos-600 text-white font-medium shadow-[var(--shadow-lift)] hover:bg-sos-700 transition">
+  <lucide-icon [img]="LifeBuoy" class="w-5 h-5" />
+  Cần hỗ trợ ngay
+</button>
+
+<!-- Chatbot bubble đã chuyển sang ChatbotComponent riêng -->
+
+<!-- SOS Modal -->
+@if (crisis.sosVisible()) {
+  <div role="dialog" aria-modal="true" aria-labelledby="sos-title"
+       class="fixed inset-0 z-[90] flex items-center justify-center p-4">
+
+    <!-- Backdrop -->
+    <div (click)="crisis.closeSos()"
+         class="absolute inset-0 bg-sage-900/60 backdrop-blur-sm"></div>
+
+    <!-- Panel -->
+    <div class="relative w-full max-w-md bg-white dark:bg-sage-900 rounded-2xl shadow-[var(--shadow-lift)] p-8 fade-up">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-sos-100 dark:bg-sos-900 text-sos-600 dark:text-sos-300 mb-4">
+            <lucide-icon [img]="HeartHandshake" class="w-5 h-5" />
+          </span>
+          <h2 id="sos-title" class="font-serif text-2xl text-ink dark:text-white">Bạn không cô đơn</h2>
+          <p class="mt-1 text-[14px] text-sage-600 dark:text-stone-200">Luôn có người sẵn sàng lắng nghe bạn.</p>
+        </div>
+        <button (click)="crisis.closeSos()"
+                aria-label="Đóng"
+                autofocus
+                class="grid place-items-center w-9 h-9 rounded-full hover:bg-stone-100 dark:hover:bg-sage-700 transition text-sage-500">
+          <lucide-icon [img]="X" class="w-5 h-5" />
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-3">
+        @for (h of hotlines; track h.number) {
+          @let urgent = h.number === '115';
+          <a [href]="'tel:' + h.number"
+             class="flex items-center justify-between gap-3 p-4 rounded-xl border bg-stone-50 dark:bg-sage-900 hover:bg-stone-100 dark:hover:bg-sage-700 transition"
+             [class.border-sos-300]="urgent" [class.dark:border-sos-800]="urgent"
+             [class.bg-sos-50]="urgent" [class.dark:bg-sos-900]="urgent"
+             [class.hairline]="!urgent">
+            <div class="min-w-0">
+              <p class="font-semibold"
+                 [class.text-sos-700]="urgent" [class.dark:text-sos-200]="urgent"
+                 [class.text-ink]="!urgent" [class.dark:text-white]="!urgent">
+                {{ h.name }} · {{ h.number }}
+              </p>
+              <p class="text-[12px] text-sage-600 dark:text-stone-300 mt-0.5">
+                {{ h.hours }}
+                @if (h.isFree) { · Miễn phí }
+                @if (h.note) { · {{ h.note }} }
+              </p>
+            </div>
+            <lucide-icon [img]="Phone" class="w-5 h-5 shrink-0"
+                         [class.text-sos-600]="urgent" [class.dark:text-sos-300]="urgent"
+                         [class.text-sage-600]="!urgent" [class.dark:text-stone-200]="!urgent" />
+          </a>
+        }
+
+        @if (safetyPlan.hasPlan()) {
+          <a routerLink="/safety-plan" (click)="crisis.closeSos()"
+             class="flex items-center gap-2.5 p-3.5 rounded-xl border border-sage-200 dark:border-sage-700 hover:bg-sage-50 dark:hover:bg-sage-800 transition">
+            <lucide-icon [img]="ShieldCheck" class="w-5 h-5 text-sage-600 dark:text-sage-300 shrink-0" />
+            <span class="text-[14px] font-medium text-sage-700 dark:text-stone-100">Mở kế hoạch an toàn của tôi</span>
+          </a>
+        }
+        <p class="text-[12px] text-sage-500 dark:text-stone-300 leading-relaxed">
+          Ngoài giờ hoạt động? Hãy nhắn cho người thân tin cậy, hoặc tới cơ sở y tế gần nhất.
+        </p>
+      </div>
+    </div>
+  </div>
+}

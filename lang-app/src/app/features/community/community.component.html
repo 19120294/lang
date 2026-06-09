@@ -1,0 +1,120 @@
+<div class="max-w-3xl mx-auto px-5 sm:px-8 py-12">
+
+  <div class="fade-up">
+    <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-4">Cộng đồng</p>
+    <h1 class="font-serif text-4xl sm:text-5xl text-ink dark:text-white">Lời khuyên từ những người đồng cảm</h1>
+    <p class="mt-5 text-lg text-sage-800 dark:text-stone-200 leading-relaxed">
+      Nơi bạn chia sẻ một lời động viên, hoặc đón nhận lời khuyên ấm áp từ người khác. Ẩn danh và an toàn.
+    </p>
+
+    <!-- Moderation notice -->
+    <div class="mt-7 flex items-start gap-3 p-5 rounded-xl bg-sage-50 dark:bg-sage-800/60 border hairline">
+      <lucide-icon [img]="ShieldCheck" class="w-5 h-5 text-sage-600 dark:text-sage-300 shrink-0 mt-0.5" />
+      <p class="text-[13px] text-sage-700 dark:text-stone-200 leading-relaxed">
+        Mọi bài viết đều được <strong class="font-medium">kiểm duyệt trước khi hiển thị</strong>.
+        Chúng tôi chặn nội dung mô tả chi tiết hành vi tự hại và sẽ ưu tiên hỗ trợ nếu phát hiện ai đó đang gặp khủng hoảng.
+      </p>
+    </div>
+  </div>
+
+  <!-- Composer -->
+  <div class="mt-10 bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6">
+    @if (!submitted()) {
+      <label for="post-draft" class="font-serif text-lg text-ink dark:text-white">Để lại một lời khuyên / lời động viên</label>
+      <textarea id="post-draft" rows="4"
+                [value]="draft()"
+                (input)="onDraft($event)"
+                placeholder="Điều gì đã giúp bạn vượt qua giai đoạn khó khăn? Chia sẻ để tiếp sức cho người khác…"
+                class="mt-4 w-full px-4 py-3 rounded-lg bg-stone-50 dark:bg-sage-700 border hairline text-ink dark:text-white placeholder:text-sage-400 focus:border-sage-500 transition resize-none"></textarea>
+      <div class="mt-4 flex items-center justify-between flex-wrap gap-3">
+        <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-300">
+          <lucide-icon [img]="EyeOff" class="w-4 h-4" /> Đăng ẩn danh · Sẽ qua kiểm duyệt
+        </span>
+        <button (click)="submit()"
+                [disabled]="!draft().trim()"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sage-700 text-white font-medium text-[14px] hover:bg-sage-800 disabled:opacity-40 disabled:cursor-not-allowed transition">
+          <lucide-icon [img]="Send" class="w-4 h-4" /> Gửi để duyệt
+        </button>
+      </div>
+    } @else {
+      <div class="text-center py-4">
+        <div class="w-12 h-12 rounded-full bg-sage-100 dark:bg-sage-700 grid place-items-center mx-auto mb-3">
+          <lucide-icon [img]="Clock" class="w-6 h-6 text-sage-600 dark:text-sage-300" />
+        </div>
+        <p class="font-serif text-lg text-ink dark:text-white">Cảm ơn vì đã chia sẻ</p>
+        <p class="mt-1 text-[14px] text-sage-600 dark:text-stone-300">Bài của bạn sẽ hiển thị sau khi được kiểm duyệt để đảm bảo an toàn cho cộng đồng.</p>
+        <button (click)="submitted.set(false)" class="mt-4 text-[14px] text-sage-700 dark:text-sage-300 font-medium hover:underline">Viết thêm</button>
+      </div>
+    }
+  </div>
+
+  <!-- Feed -->
+  <div class="mt-8 space-y-5">
+    @for (post of posts(); track post.id) {
+      <article class="bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6">
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <span class="grid place-items-center w-10 h-10 rounded-full bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200">
+            <lucide-icon [img]="UserRound" class="w-5 h-5" />
+          </span>
+          <div>
+            <p class="font-medium text-ink dark:text-white text-[15px]">Một người bạn ẩn danh</p>
+            <p class="text-[12px] text-sage-500">{{ post.time }}</p>
+          </div>
+          <span class="ml-auto inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full bg-sage-50 dark:bg-sage-700 text-sage-600 dark:text-sage-300">
+            <lucide-icon [img]="BadgeCheck" class="w-3.5 h-3.5" /> Đã kiểm duyệt
+          </span>
+        </div>
+
+        <!-- Content warning -->
+        @if (post.hasCW) {
+          <div class="flex items-center gap-2 text-[12px] text-sos-700 dark:text-sos-300 mb-3">
+            <lucide-icon [img]="TriangleAlert" class="w-4 h-4 shrink-0" />
+            Cảnh báo nội dung: {{ post.cwLabel }}
+          </div>
+          @if (!post.cwVisible) {
+            <div class="relative">
+              <p class="text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed blur-sm select-none" aria-hidden="true">
+                {{ post.content }}
+              </p>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <button (click)="toggleCW(post.id)"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white dark:bg-sage-700 border hairline text-[13px] font-medium text-sage-700 dark:text-stone-200 shadow-[var(--shadow-card)]">
+                  <lucide-icon [img]="Eye" class="w-4 h-4" /> Hiện nội dung
+                </button>
+              </div>
+            </div>
+          } @else {
+            <p class="text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">{{ post.content }}</p>
+          }
+        } @else {
+          <p class="text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">{{ post.content }}</p>
+        }
+
+        <!-- Actions -->
+        <div class="mt-5 flex items-center gap-2 flex-wrap">
+          <button (click)="like(post.id)"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-stone-50 dark:bg-sage-700 border hairline text-[13px] text-sage-700 dark:text-stone-200 hover:border-sos-300 transition">
+            <lucide-icon [img]="Heart" class="w-4 h-4 text-sos-400" /> {{ post.likes }}
+          </button>
+          <button (click)="hug(post.id)"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-stone-50 dark:bg-sage-700 border hairline text-[13px] text-sage-700 dark:text-stone-200 hover:border-sage-400 transition">
+            <lucide-icon [img]="HandHeart" class="w-4 h-4 text-sage-500" /> Gửi cái ôm · {{ post.hugs }}
+          </button>
+          <button (click)="report(post.id)" [disabled]="reported().has(post.id)"
+                  class="ml-auto inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[12px] text-sage-500 hover:text-sos-600 disabled:text-sage-400 disabled:cursor-default transition"
+                  aria-label="Báo cáo bài viết">
+            <lucide-icon [img]="Flag" class="w-4 h-4" />
+            {{ reported().has(post.id) ? 'Đã báo cáo' : 'Báo cáo' }}
+          </button>
+        </div>
+      </article>
+    }
+    @empty {
+      <div class="text-center py-16 text-sage-500 dark:text-stone-300">
+        <p class="font-serif text-xl mb-2">Chưa có bài viết nào</p>
+        <p class="text-[14px]">Hãy là người đầu tiên chia sẻ một lời động viên cho cộng đồng.</p>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="max-w-3xl mx-auto px-5 sm:px-8 py-12">
+
+  <div class="flex items-center gap-3 fade-up">
+    <span class="grid place-items-center w-11 h-11 rounded-xl bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200">
+      <lucide-icon [img]="ShieldCheck" class="w-5 h-5" />
+    </span>
+    <div>
+      <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium">Quản trị</p>
+      <h1 class="font-serif text-3xl text-ink dark:text-white">Kiểm duyệt cộng đồng</h1>
+    </div>
+  </div>
+
+  @if (forbidden()) {
+    <div class="mt-10 text-center py-16">
+      <p class="font-serif text-2xl text-ink dark:text-white mb-2">Không có quyền truy cập</p>
+      <p class="text-[14px] text-sage-600 dark:text-stone-300 mb-5">Trang này chỉ dành cho quản trị viên.</p>
+      <button (click)="goAuth()" class="px-6 py-3 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 transition">
+        Đăng nhập quản trị viên
+      </button>
+    </div>
+  } @else if (loading()) {
+    <p class="mt-10 text-center text-sage-500">Đang tải…</p>
+  } @else {
+    <p class="mt-6 text-[14px] text-sage-600 dark:text-stone-300">
+      {{ posts().length }} bài đang chờ duyệt. Bài có <strong>tín hiệu rủi ro</strong> được ưu tiên lên đầu.
+    </p>
+
+    <div class="mt-6 space-y-4">
+      @for (p of posts(); track p.id) {
+        <article class="bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6"
+                 [class.border-sos-300]="p.riskDetected" [class.dark:border-sos-800]="p.riskDetected">
+          <!-- Risk flag -->
+          @if (p.riskDetected) {
+            <div class="flex items-center gap-2 text-[13px] text-sos-700 dark:text-sos-300 mb-3 font-medium">
+              <lucide-icon [img]="TriangleAlert" class="w-4 h-4" />
+              Phát hiện tín hiệu rủi ro — xem xét ưu tiên, cân nhắc gắn cảnh báo nội dung
+            </div>
+          }
+
+          <p class="text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">{{ p.content }}</p>
+
+          <!-- Content warning toggle -->
+          <div class="mt-4 flex flex-wrap items-center gap-3 p-3 rounded-lg bg-stone-50 dark:bg-sage-800 border hairline">
+            <label class="flex items-center gap-2 text-[13px] text-sage-700 dark:text-stone-200 cursor-pointer">
+              <input type="checkbox" [checked]="cwState()[p.id].on" (change)="toggleCW(p.id)"
+                     class="w-4 h-4 rounded accent-sage-600" />
+              Gắn cảnh báo nội dung
+            </label>
+            @if (cwState()[p.id].on) {
+              <input type="text" [ngModel]="cwState()[p.id].label" (ngModelChange)="setLabel(p.id, $event)"
+                     placeholder="Nhãn cảnh báo (vd: nhắc tới trầm cảm)"
+                     class="flex-1 min-w-[180px] px-3 py-1.5 rounded-md bg-white dark:bg-sage-700 border hairline text-[13px] text-ink dark:text-white placeholder:text-sage-400" />
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-4 flex gap-3">
+            <button (click)="approve(p)"
+                    class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-sage-700 text-white text-[14px] font-medium hover:bg-sage-800 transition">
+              <lucide-icon [img]="Check" class="w-4 h-4" /> Duyệt
+            </button>
+            <button (click)="reject(p)"
+                    class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg border border-sos-200 dark:border-sos-800 text-sos-700 dark:text-sos-300 text-[14px] font-medium hover:bg-sos-50 dark:hover:bg-sos-900/20 transition">
+              <lucide-icon [img]="X" class="w-4 h-4" /> Từ chối
+            </button>
+          </div>
+        </article>
+      }
+      @empty {
+        <div class="text-center py-16 text-sage-500 dark:text-stone-300">
+          <span class="inline-grid place-items-center w-14 h-14 rounded-full bg-sage-100 dark:bg-sage-700 text-sage-500 mb-4">
+            <lucide-icon [img]="Inbox" class="w-7 h-7" />
+          </span>
+          <p class="font-serif text-xl text-ink dark:text-white mb-1">Hàng chờ trống</p>
+          <p class="text-[14px]">Không có bài nào đang chờ duyệt. Tốt lắm!</p>
+        </div>
+      }
+    </div>
+  }
+</div>

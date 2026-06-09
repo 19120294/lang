@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thư viện sách · Lặng</title>
+  <meta name="description" content="Những cuốn sách được gợi ý cho hành trình chăm sóc sức khỏe tâm lý. Có chuyên gia review." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+    tailwind.config = { darkMode:'class', theme:{ extend:{
+      fontFamily:{ sans:['"Be Vietnam Pro"','system-ui','sans-serif'], serif:['"Lora"','Georgia','serif'] },
+      colors:{
+        sage:{50:'#f4f6f4',100:'#e6ebe6',200:'#cdd7cd',300:'#a9bbab',400:'#7f9882',500:'#5f7a63',600:'#4b614f',700:'#3d4e40',800:'#323f35',900:'#2a342c'},
+        stone:{50:'#faf9f6',100:'#f3f1ea',200:'#e7e3d8',300:'#d4cdbd',400:'#b6ae9c',500:'#8c8676',600:'#6f6a5d',700:'#5a564b',800:'#403d36',900:'#2b2924'},
+        sos:{50:'#fbf2ee',100:'#f5e0d7',200:'#e9c0b0',300:'#d99a82',400:'#c87358',500:'#b5573c',600:'#9c4631',700:'#7f3a2a',800:'#683227',900:'#562b23'},
+        ink:'#222b25'
+      },
+      letterSpacing:{ tightish:'-0.011em' },
+      boxShadow:{ card:'0 1px 2px rgba(34,43,37,.04), 0 8px 24px -16px rgba(34,43,37,.16)', lift:'0 2px 4px rgba(34,43,37,.05), 0 18px 40px -22px rgba(34,43,37,.28)' }
+    }}}
+  </script>
+  <style>
+    body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    h1,h2,h3{letter-spacing:-0.012em}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+    :focus-visible{outline:2px solid #4b614f;outline-offset:3px;border-radius:4px}
+    .hairline{border-color:rgba(34,43,37,.10)}.dark .hairline{border-color:rgba(255,255,255,.08)}
+    .chip{display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:.875rem;background:linear-gradient(160deg,#eef2ee,#e1e9e2);color:#3d4e40;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(34,43,37,.06)}
+    .dark .chip{background:linear-gradient(160deg,#3a4a3d,#2f3d33);color:#cdd7cd}
+    [data-lucide]{display:inline-block;vertical-align:middle}
+    .cover{aspect-ratio:3/4;border-radius:.5rem;display:flex;align-items:flex-end;padding:.85rem;color:#fff;font-family:'Lora',serif;font-weight:600;line-height:1.2;box-shadow:0 10px 24px -12px rgba(34,43,37,.5);position:relative;overflow:hidden}
+    .cover::after{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:rgba(0,0,0,.18)}
+  </style>
+</head>
+<body class="bg-stone-50 dark:bg-sage-900 text-ink dark:text-stone-100 font-sans tracking-tightish transition-colors">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-white focus:px-4 focus:py-2 focus:rounded-lg">Bỏ qua tới nội dung chính</a>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-stone-50/80 dark:bg-sage-900/80 border-b hairline">
+    <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between" aria-label="Điều hướng chính">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <span class="grid place-items-center w-8 h-8 rounded-md border border-sage-600 dark:border-sage-300"><span class="w-2.5 h-2.5 rounded-full bg-sage-600 dark:bg-sage-300"></span></span>
+        <span class="font-serif text-xl font-semibold text-ink dark:text-white">Lặng</span>
+      </a>
+      <div class="hidden lg:flex items-center gap-7 text-[14px] text-sage-700 dark:text-stone-200">
+        <a href="index.html#tests" class="hover:text-sage-500 transition">Đánh giá</a>
+        <a href="index.html#knowledge" class="hover:text-sage-500 transition">Tra cứu</a>
+        <a href="books.html" class="text-ink dark:text-white font-medium">Thư viện sách</a>
+        <a href="community.html" class="hover:text-sage-500 transition">Cộng đồng</a>
+        <a href="mood-history.html" class="hover:text-sage-500 transition">Cảm xúc</a>
+        <a href="journal.html" class="hover:text-sage-500 transition">Nhật ký</a>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button id="themeToggle" aria-label="Chuyển chế độ sáng/tối" class="grid place-items-center w-10 h-10 rounded-lg border hairline hover:bg-stone-100 dark:hover:bg-sage-800 transition text-sage-700 dark:text-stone-200">
+          <i data-lucide="sun" class="dark:hidden w-[18px] h-[18px]"></i><i data-lucide="moon" class="hidden dark:block w-[18px] h-[18px]"></i>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="max-w-6xl mx-auto px-5 sm:px-8 pt-16 pb-10">
+      <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-4">Thư viện</p>
+      <h1 class="font-serif text-4xl sm:text-5xl text-ink dark:text-white">Những cuốn sách đồng hành</h1>
+      <p class="mt-5 max-w-2xl text-lg text-sage-700/90 dark:text-stone-300 leading-relaxed">Gợi ý sách cho hành trình hiểu và chăm sóc bản thân. Mỗi đầu sách kèm lý do gợi ý, được chuyên gia lâm sàng xem qua.</p>
+      <p class="mt-4 inline-flex items-center gap-2 text-[13px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Sách tham khảo, không thay thế trị liệu chuyên môn.</p>
+    </section>
+
+    <!-- FILTER -->
+    <section class="max-w-6xl mx-auto px-5 sm:px-8 pb-8">
+      <div class="flex flex-wrap gap-2">
+        <button class="px-4 py-1.5 rounded-full bg-sage-700 text-white text-[14px] font-medium">Tất cả</button>
+        <button class="px-4 py-1.5 rounded-full bg-white dark:bg-sage-800 border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:border-sage-500 transition">Trầm cảm</button>
+        <button class="px-4 py-1.5 rounded-full bg-white dark:bg-sage-800 border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:border-sage-500 transition">Lo âu</button>
+        <button class="px-4 py-1.5 rounded-full bg-white dark:bg-sage-800 border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:border-sage-500 transition">Chánh niệm</button>
+        <button class="px-4 py-1.5 rounded-full bg-white dark:bg-sage-800 border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:border-sage-500 transition">Chữa lành</button>
+        <button class="px-4 py-1.5 rounded-full bg-white dark:bg-sage-800 border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:border-sage-500 transition">Ý nghĩa cuộc sống</button>
+      </div>
+    </section>
+
+    <!-- BOOK GRID -->
+    <section class="max-w-6xl mx-auto px-5 sm:px-8 pb-20">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <article class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card overflow-hidden flex flex-col">
+          <div class="p-6 grid grid-cols-[88px,1fr] gap-5">
+            <div class="cover" style="background:linear-gradient(150deg,#3d4e40,#1f2a26)"><span>Đại Dương Đen</span></div>
+            <div>
+              <span class="text-[11px] uppercase tracking-wide text-sage-500 font-medium">Trầm cảm</span>
+              <h3 class="font-serif text-lg text-ink dark:text-white mt-1">Đại Dương Đen</h3>
+              <p class="text-[13px] text-sage-600 dark:text-stone-400">Đặng Hoàng Giang</p>
+              <div class="flex items-center gap-1 mt-2 text-sos-500"><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i></div>
+            </div>
+          </div>
+          <p class="px-6 pb-5 text-[14px] text-sage-700/90 dark:text-stone-300 leading-relaxed flex-1">Hành trình thấu hiểu người trầm cảm tại Việt Nam — giúp bạn và người thân bớt cô đơn, bớt phán xét.</p>
+          <div class="px-6 py-4 border-t hairline flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Chuyên gia review</span>
+            <a href="#" class="text-[14px] font-medium text-sage-700 dark:text-sage-300 inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+
+        <article class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card overflow-hidden flex flex-col">
+          <div class="p-6 grid grid-cols-[88px,1fr] gap-5">
+            <div class="cover" style="background:linear-gradient(150deg,#5f7a63,#3d4e40)"><span>Đi Tìm Lẽ Sống</span></div>
+            <div>
+              <span class="text-[11px] uppercase tracking-wide text-sage-500 font-medium">Ý nghĩa cuộc sống</span>
+              <h3 class="font-serif text-lg text-ink dark:text-white mt-1">Đi Tìm Lẽ Sống</h3>
+              <p class="text-[13px] text-sage-600 dark:text-stone-400">Viktor E. Frankl</p>
+              <div class="flex items-center gap-1 mt-2 text-sos-500"><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star-half" class="w-3.5 h-3.5 fill-current"></i></div>
+            </div>
+          </div>
+          <p class="px-6 pb-5 text-[14px] text-sage-700/90 dark:text-stone-300 leading-relaxed flex-1">Tìm thấy ý nghĩa ngay cả trong đau khổ tột cùng — một chỗ dựa tinh thần sâu sắc.</p>
+          <div class="px-6 py-4 border-t hairline flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Chuyên gia review</span>
+            <a href="#" class="text-[14px] font-medium text-sage-700 dark:text-sage-300 inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+
+        <article class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card overflow-hidden flex flex-col">
+          <div class="p-6 grid grid-cols-[88px,1fr] gap-5">
+            <div class="cover" style="background:linear-gradient(150deg,#6f6a5d,#403d36)"><span>Bước Chậm Lại</span></div>
+            <div>
+              <span class="text-[11px] uppercase tracking-wide text-sage-500 font-medium">Chữa lành</span>
+              <h3 class="font-serif text-lg text-ink dark:text-white mt-1">Bước Chậm Lại Giữa Thế Gian Vội Vã</h3>
+              <p class="text-[13px] text-sage-600 dark:text-stone-400">Hae Min</p>
+              <div class="flex items-center gap-1 mt-2 text-sos-500"><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i></div>
+            </div>
+          </div>
+          <p class="px-6 pb-5 text-[14px] text-sage-700/90 dark:text-stone-300 leading-relaxed flex-1">Những lời nhắn dịu dàng để bạn dừng lại, thở, và tử tế hơn với chính mình.</p>
+          <div class="px-6 py-4 border-t hairline flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Chuyên gia review</span>
+            <a href="#" class="text-[14px] font-medium text-sage-700 dark:text-sage-300 inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+
+        <article class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card overflow-hidden flex flex-col">
+          <div class="p-6 grid grid-cols-[88px,1fr] gap-5">
+            <div class="cover" style="background:linear-gradient(150deg,#4b614f,#2a342c)"><span>Sức Mạnh Của Hiện Tại</span></div>
+            <div>
+              <span class="text-[11px] uppercase tracking-wide text-sage-500 font-medium">Chánh niệm</span>
+              <h3 class="font-serif text-lg text-ink dark:text-white mt-1">Sức Mạnh Của Hiện Tại</h3>
+              <p class="text-[13px] text-sage-600 dark:text-stone-400">Eckhart Tolle</p>
+              <div class="flex items-center gap-1 mt-2 text-sos-500"><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star-half" class="w-3.5 h-3.5 fill-current"></i></div>
+            </div>
+          </div>
+          <p class="px-6 pb-5 text-[14px] text-sage-700/90 dark:text-stone-300 leading-relaxed flex-1">Học cách buông những lo lắng về quá khứ và tương lai, an trú trong khoảnh khắc hiện tại.</p>
+          <div class="px-6 py-4 border-t hairline flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Chuyên gia review</span>
+            <a href="#" class="text-[14px] font-medium text-sage-700 dark:text-sage-300 inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+
+        <article class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card overflow-hidden flex flex-col">
+          <div class="p-6 grid grid-cols-[88px,1fr] gap-5">
+            <div class="cover" style="background:linear-gradient(150deg,#7f9882,#4b614f)"><span>Lo Âu</span></div>
+            <div>
+              <span class="text-[11px] uppercase tracking-wide text-sage-500 font-medium">Lo âu</span>
+              <h3 class="font-serif text-lg text-ink dark:text-white mt-1">Khi Mây Đen Kéo Tới</h3>
+              <p class="text-[13px] text-sage-600 dark:text-stone-400">Matthew Johnstone</p>
+              <div class="flex items-center gap-1 mt-2 text-sos-500"><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i></div>
+            </div>
+          </div>
+          <p class="px-6 pb-5 text-[14px] text-sage-700/90 dark:text-stone-300 leading-relaxed flex-1">Cuốn sách tranh nhẹ nhàng giúp gọi tên và sống chung với những ngày u ám.</p>
+          <div class="px-6 py-4 border-t hairline flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Chuyên gia review</span>
+            <a href="#" class="text-[14px] font-medium text-sage-700 dark:text-sage-300 inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+
+        <article class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card overflow-hidden flex flex-col">
+          <div class="p-6 grid grid-cols-[88px,1fr] gap-5">
+            <div class="cover" style="background:linear-gradient(150deg,#8c8676,#5a564b)"><span>Thói Quen Nguyên Tử</span></div>
+            <div>
+              <span class="text-[11px] uppercase tracking-wide text-sage-500 font-medium">Chữa lành</span>
+              <h3 class="font-serif text-lg text-ink dark:text-white mt-1">Thói Quen Nguyên Tử</h3>
+              <p class="text-[13px] text-sage-600 dark:text-stone-400">James Clear</p>
+              <div class="flex items-center gap-1 mt-2 text-sos-500"><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star-half" class="w-3.5 h-3.5 fill-current"></i></div>
+            </div>
+          </div>
+          <p class="px-6 pb-5 text-[14px] text-sage-700/90 dark:text-stone-300 leading-relaxed flex-1">Xây những thói quen nhỏ, tích cực để dần ổn định lại nhịp sống và tâm trạng.</p>
+          <div class="px-6 py-4 border-t hairline flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-400"><i data-lucide="badge-check" class="w-4 h-4 text-sage-500"></i> Chuyên gia review</span>
+            <a href="#" class="text-[14px] font-medium text-sage-700 dark:text-sage-300 inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-sage-900 text-stone-200">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5"><span class="grid place-items-center w-8 h-8 rounded-md border border-sage-300"><span class="w-2.5 h-2.5 rounded-full bg-sage-300"></span></span><span class="font-serif text-xl text-white">Lặng</span></div>
+      <p class="text-[12px] text-stone-400 max-w-xl text-center sm:text-right leading-relaxed">Gợi ý sách chỉ mang tính tham khảo, không thay thế chẩn đoán hay trị liệu chuyên môn. Nếu bạn đang gặp khủng hoảng, hãy bấm <span class="text-sos-300 font-medium">Cần hỗ trợ ngay</span> hoặc gọi 115.</p>
+    </div>
+  </footer>
+
+  <!-- SOS -->
+  <button id="sosBtn" aria-haspopup="dialog" class="fixed bottom-5 right-5 z-[80] flex items-center gap-2.5 pl-4 pr-5 py-3.5 rounded-full bg-sos-600 text-white font-medium shadow-lift hover:bg-sos-700 transition focus-visible:ring-4 focus-visible:ring-sos-200"><i data-lucide="life-buoy" class="w-5 h-5"></i> Cần hỗ trợ ngay</button>
+  <div id="sosModal" role="dialog" aria-modal="true" aria-labelledby="sosTitle" class="hidden fixed inset-0 z-[90] items-center justify-center p-4">
+    <div id="sosBackdrop" class="absolute inset-0 bg-sage-900/60 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-md bg-white dark:bg-sage-800 rounded-2xl shadow-lift p-8">
+      <div class="flex items-start justify-between gap-4">
+        <div><span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-sos-50 dark:bg-sos-900/30 text-sos-600 dark:text-sos-300 mb-4"><i data-lucide="heart-handshake" class="w-5 h-5"></i></span>
+          <h2 id="sosTitle" class="font-serif text-2xl text-ink dark:text-white">Bạn không cô đơn</h2><p class="mt-1 text-[14px] text-sage-600 dark:text-stone-300">Luôn có người sẵn sàng lắng nghe bạn.</p></div>
+        <button id="sosClose" aria-label="Đóng" class="grid place-items-center w-9 h-9 rounded-full hover:bg-stone-100 dark:hover:bg-sage-700 transition text-sage-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="mt-6 space-y-3">
+        <a href="tel:115" class="flex items-center justify-between p-4 rounded-xl bg-sos-50 dark:bg-sos-900/20 border border-sos-200 dark:border-sos-800 hover:bg-sos-100 transition"><div><p class="font-semibold text-sos-700 dark:text-sos-200">Cấp cứu y tế · 115</p><p class="text-[12px] text-sage-600 dark:text-stone-400">Nguy hiểm tức thời · 24/7</p></div><i data-lucide="phone" class="w-5 h-5 text-sos-600 dark:text-sos-300"></i></a>
+        <a href="tel:18001567" class="flex items-center justify-between p-4 rounded-xl bg-stone-50 dark:bg-sage-700 border hairline hover:bg-stone-100 transition"><div><p class="font-semibold text-ink dark:text-white">Đường dây hỗ trợ tâm lý <span class="text-[11px] font-normal text-sos-600">[CẦN VERIFY]</span></p><p class="text-[12px] text-sage-600 dark:text-stone-400">Giờ hoạt động: ___ · Miễn phí</p></div><i data-lucide="phone" class="w-5 h-5 text-sage-600 dark:text-stone-300"></i></a>
+        <p class="text-[12px] text-sage-500 dark:text-stone-400 leading-relaxed">Ngoài giờ hoạt động? Hãy nhắn cho người thân tin cậy, hoặc tới cơ sở y tế gần nhất. Hãy ở cạnh ai đó nếu có thể.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    const root=document.documentElement;
+    if(localStorage.theme==='dark'||(!('theme'in localStorage)&&matchMedia('(prefers-color-scheme: dark)').matches))root.classList.add('dark');
+    themeToggle.onclick=()=>{root.classList.toggle('dark');localStorage.theme=root.classList.contains('dark')?'dark':'light'};
+    const modal=document.getElementById('sosModal');
+    sosBtn.onclick=()=>{modal.classList.remove('hidden');modal.classList.add('flex');sosClose.focus()};
+    const close=()=>{modal.classList.add('hidden');modal.classList.remove('flex');sosBtn.focus()};
+    sosClose.onclick=close;sosBackdrop.onclick=close;
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.classList.contains('hidden'))close()});
+  </script>
+</body>
+</html>

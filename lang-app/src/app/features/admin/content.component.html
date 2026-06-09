@@ -1,0 +1,206 @@
+<div class="max-w-4xl mx-auto px-5 sm:px-8 py-12">
+
+  @if (forbidden()) {
+    <div class="text-center py-20">
+      <p class="font-serif text-2xl text-ink dark:text-white mb-3">Bạn không có quyền truy cập</p>
+      <a routerLink="/" class="text-sage-700 dark:text-sage-300 hover:underline">← Về trang chủ</a>
+    </div>
+  } @else {
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium">Quản trị</p>
+        <h1 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Quản lý nội dung</h1>
+      </div>
+      <a routerLink="/admin" class="inline-flex items-center gap-1.5 text-[14px] text-sage-600 dark:text-stone-300 hover:text-sage-800 transition">
+        <lucide-icon [img]="ArrowLeft" class="w-4 h-4" /> Kiểm duyệt cộng đồng
+      </a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mt-6 flex rounded-lg border hairline bg-white dark:bg-sage-900 p-1 w-fit">
+      <button (click)="setTab('articles')" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-[14px] font-medium transition"
+              [class.bg-sage-700]="tab()==='articles'" [class.text-white]="tab()==='articles'"
+              [class.text-sage-700]="tab()!=='articles'" [class.dark:text-stone-300]="tab()!=='articles'">
+        <lucide-icon [img]="FileText" class="w-4 h-4" /> Bài viết
+      </button>
+      <button (click)="setTab('facilities')" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-[14px] font-medium transition"
+              [class.bg-sage-700]="tab()==='facilities'" [class.text-white]="tab()==='facilities'"
+              [class.text-sage-700]="tab()!=='facilities'" [class.dark:text-stone-300]="tab()!=='facilities'">
+        <lucide-icon [img]="Building2" class="w-4 h-4" /> Cơ sở hỗ trợ
+      </button>
+      <button (click)="setTab('books')" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-[14px] font-medium transition"
+              [class.bg-sage-700]="tab()==='books'" [class.text-white]="tab()==='books'"
+              [class.text-sage-700]="tab()!=='books'" [class.dark:text-stone-300]="tab()!=='books'">
+        <lucide-icon [img]="BookOpen" class="w-4 h-4" /> Sách
+      </button>
+    </div>
+
+    @if (error()) {
+      <div class="mt-4 p-3 rounded-lg bg-sos-50 dark:bg-sos-900/20 border border-sos-200 dark:border-sos-800 text-[13px] text-sos-700 dark:text-sos-300">{{ error() }}</div>
+    }
+
+    <!-- FORM -->
+    @if (draft(); as d) {
+      <div class="mt-6 bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6 space-y-4">
+        <h2 class="font-serif text-lg text-ink dark:text-white">{{ d.id ? 'Sửa' : 'Thêm mới' }}</h2>
+
+        @if (tab() === 'articles') {
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block">
+              <span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Slug (đường dẫn)</span>
+              <input [(ngModel)]="d.slug" placeholder="vd: lo-au-la-gi" class="lang-input" />
+            </label>
+            <label class="block">
+              <span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Danh mục</span>
+              <select [(ngModel)]="d.category" class="lang-input">
+                @for (c of CATEGORIES; track c.v) { <option [value]="c.v">{{ c.l }}</option> }
+              </select>
+            </label>
+          </div>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Tiêu đề</span>
+            <input [(ngModel)]="d.title" class="lang-input" /></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Tóm tắt</span>
+            <textarea [(ngModel)]="d.excerpt" rows="2" class="lang-input resize-none"></textarea></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Nội dung (Markdown: ## tiêu đề, - gạch đầu dòng, **đậm**)</span>
+            <textarea [(ngModel)]="d.content" rows="8" class="lang-input resize-y font-mono text-[13px]"></textarea></label>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Phút đọc</span>
+              <input type="number" [(ngModel)]="d.readMinutes" class="lang-input" /></label>
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Người review</span>
+              <input [(ngModel)]="d.reviewedBy" placeholder="vd: ThS. Tâm lý học" class="lang-input" /></label>
+          </div>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Thẻ (cách nhau bởi dấu phẩy)</span>
+            <input [(ngModel)]="d.tagsStr" placeholder="lo âu, triệu chứng" class="lang-input" /></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Nguồn tham khảo (mỗi dòng một nguồn)</span>
+            <textarea [(ngModel)]="d.sourcesStr" rows="3" class="lang-input resize-none text-[13px]"></textarea></label>
+        }
+
+        @else if (tab() === 'facilities') {
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Tên cơ sở</span>
+            <input [(ngModel)]="d.name" class="lang-input" /></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Mô tả</span>
+            <textarea [(ngModel)]="d.description" rows="2" class="lang-input resize-none"></textarea></label>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Khu vực</span>
+              <select [(ngModel)]="d.area" class="lang-input">
+                @for (a of AREAS; track a.v) { <option [value]="a.v">{{ a.l }}</option> }
+              </select></label>
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Giờ hoạt động</span>
+              <input [(ngModel)]="d.hours" placeholder="vd: T2–T6, 8:00–17:00" class="lang-input" /></label>
+          </div>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Địa chỉ</span>
+            <input [(ngModel)]="d.address" class="lang-input" /></label>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Điện thoại</span>
+              <input [(ngModel)]="d.phone" class="lang-input" /></label>
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Website</span>
+              <input [(ngModel)]="d.website" class="lang-input" /></label>
+          </div>
+          <div>
+            <span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Chi phí</span>
+            <div class="mt-1.5 flex flex-wrap gap-2">
+              @for (c of COSTS; track c.v) {
+                <button type="button" (click)="toggleArr('cost', c.v)" class="px-3 py-1.5 rounded-full text-[13px] border transition"
+                        [class.bg-sage-700]="inArr('cost',c.v)" [class.text-white]="inArr('cost',c.v)" [class.border-sage-700]="inArr('cost',c.v)"
+                        [class.hairline]="!inArr('cost',c.v)" [class.text-sage-700]="!inArr('cost',c.v)" [class.dark:text-stone-300]="!inArr('cost',c.v)">{{ c.l }}</button>
+              }
+            </div>
+          </div>
+          <div>
+            <span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Hình thức</span>
+            <div class="mt-1.5 flex flex-wrap gap-2">
+              @for (t of TYPES; track t.v) {
+                <button type="button" (click)="toggleArr('type', t.v)" class="px-3 py-1.5 rounded-full text-[13px] border transition"
+                        [class.bg-sage-700]="inArr('type',t.v)" [class.text-white]="inArr('type',t.v)" [class.border-sage-700]="inArr('type',t.v)"
+                        [class.hairline]="!inArr('type',t.v)" [class.text-sage-700]="!inArr('type',t.v)" [class.dark:text-stone-300]="!inArr('type',t.v)">{{ t.l }}</button>
+              }
+            </div>
+          </div>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Thẻ (cách nhau bởi dấu phẩy)</span>
+            <input [(ngModel)]="d.tagsStr" class="lang-input" /></label>
+          <label class="inline-flex items-center gap-2 text-[14px] text-sage-700 dark:text-stone-200">
+            <input type="checkbox" [(ngModel)]="d.verified" class="w-4 h-4 accent-sage-700" /> Đã xác minh
+          </label>
+        }
+
+        @else {
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Tên sách</span>
+              <input [(ngModel)]="d.title" class="lang-input" /></label>
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Tác giả</span>
+              <input [(ngModel)]="d.author" class="lang-input" /></label>
+          </div>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Tóm tắt</span>
+            <textarea [(ngModel)]="d.excerpt" rows="2" class="lang-input resize-none"></textarea></label>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Danh mục</span>
+              <select [(ngModel)]="d.category" class="lang-input">
+                @for (c of BOOK_CATS; track c.v) { <option [value]="c.v">{{ c.l }}</option> }
+              </select></label>
+            <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Đánh giá (0–5)</span>
+              <input type="number" step="0.5" min="0" max="5" [(ngModel)]="d.rating" class="lang-input" /></label>
+          </div>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">URL ảnh bìa (tùy chọn)</span>
+            <input [(ngModel)]="d.coverUrl" placeholder="https://..." class="lang-input" /></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Gradient bìa (fallback)</span>
+            <input [(ngModel)]="d.coverGradient" placeholder="linear-gradient(150deg,#4b614f,#2a342c)" class="lang-input" /></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Mô tả chi tiết</span>
+            <textarea [(ngModel)]="d.detail" rows="3" class="lang-input resize-none"></textarea></label>
+          <label class="block"><span class="text-[13px] font-medium text-sage-700 dark:text-stone-300">Vì sao nên đọc</span>
+            <textarea [(ngModel)]="d.whyRead" rows="2" class="lang-input resize-none"></textarea></label>
+          <label class="inline-flex items-center gap-2 text-[14px] text-sage-700 dark:text-stone-200">
+            <input type="checkbox" [(ngModel)]="d.reviewedByExpert" class="w-4 h-4 accent-sage-700" /> Được chuyên gia gợi ý
+          </label>
+        }
+
+        <label class="flex items-center gap-2 text-[14px] text-sage-700 dark:text-stone-200">
+          <input type="checkbox" [(ngModel)]="d.published" class="w-4 h-4 accent-sage-700" /> Hiển thị công khai
+        </label>
+
+        <div class="flex gap-3 pt-2">
+          <button (click)="save()" [disabled]="saving()"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 disabled:opacity-50 transition">
+            <lucide-icon [img]="Check" class="w-4 h-4" /> {{ saving() ? 'Đang lưu…' : 'Lưu' }}
+          </button>
+          <button (click)="cancel()" class="px-5 py-2.5 rounded-lg border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-sage-800 transition">Hủy</button>
+        </div>
+      </div>
+    } @else {
+      <!-- DANH SÁCH -->
+      <div class="mt-6">
+        <button (click)="newItem()"
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 transition">
+          <lucide-icon [img]="Plus" class="w-4 h-4" /> Thêm {{ tab()==='articles' ? 'bài viết' : tab()==='facilities' ? 'cơ sở' : 'sách' }}
+        </button>
+
+        @if (loading()) {
+          <p class="mt-6 text-sage-500">Đang tải…</p>
+        } @else {
+          <div class="mt-5 space-y-2">
+            @for (item of currentList(); track item.id) {
+              <div class="flex items-center gap-3 p-4 rounded-xl bg-white dark:bg-sage-900 border hairline">
+                <div class="flex-1 min-w-0">
+                  <p class="font-medium text-ink dark:text-white truncate">{{ item.title || item.name }}</p>
+                  <p class="text-[12px] text-sage-500 truncate">
+                    {{ item.slug || item.area || item.author }}
+                    @if (!item.published) { · <span class="text-sos-600">ẩn</span> }
+                  </p>
+                </div>
+                <button (click)="editItem(item)" aria-label="Sửa"
+                        class="grid place-items-center w-9 h-9 rounded-lg text-sage-600 hover:bg-stone-100 dark:hover:bg-sage-700 transition">
+                  <lucide-icon [img]="Pencil" class="w-4 h-4" />
+                </button>
+                <button (click)="remove(tab(), item)" aria-label="Xóa"
+                        class="grid place-items-center w-9 h-9 rounded-lg text-sage-400 hover:text-sos-600 hover:bg-stone-100 dark:hover:bg-sage-700 transition">
+                  <lucide-icon [img]="Trash2" class="w-4 h-4" />
+                </button>
+              </div>
+            } @empty {
+              <p class="text-sage-400 italic text-[14px]">Chưa có mục nào.</p>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

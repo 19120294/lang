@@ -1,0 +1,97 @@
+<div class="max-w-2xl mx-auto px-5 sm:px-8 py-16">
+
+  <div class="fade-up">
+    <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-3">Tài khoản</p>
+    <h1 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Tài khoản của bạn</h1>
+  </div>
+
+  <!-- Thông tin -->
+  <div class="mt-8 bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6">
+    <div class="flex items-center gap-4">
+      <span class="grid place-items-center w-14 h-14 rounded-full bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200 shrink-0">
+        <lucide-icon [img]="UserRound" class="w-7 h-7" />
+      </span>
+      <div class="min-w-0">
+        <p class="font-medium text-ink dark:text-white text-[16px] truncate">{{ user()?.email }}</p>
+        <p class="text-[13px] text-sage-500">Đã đăng nhập · Dữ liệu được đồng bộ &amp; mã hóa</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quyền riêng tư -->
+  <div class="mt-5 flex items-start gap-3 p-4 rounded-xl bg-sage-50 dark:bg-sage-800/60 border hairline">
+    <lucide-icon [img]="ShieldCheck" class="w-5 h-5 text-sage-600 dark:text-sage-300 shrink-0 mt-0.5" />
+    <p class="text-[13px] text-sage-700 dark:text-stone-300 leading-relaxed">
+      Nhật ký &amp; cảm xúc được mã hóa AES-256 trước khi lưu trên máy chủ. Theo Nghị định 13/2023/NĐ-CP,
+      bạn có toàn quyền xóa dữ liệu của mình bất cứ lúc nào.
+    </p>
+  </div>
+
+  <!-- Hành động -->
+  <div class="mt-8 space-y-3">
+    @if (user()?.isAdmin) {
+      <a routerLink="/admin"
+         class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-sage-900 border hairline hover:bg-stone-50 dark:hover:bg-sage-800 transition text-left">
+        <span class="flex items-center gap-3 text-[15px] text-ink dark:text-white">
+          <lucide-icon [img]="ShieldCheck" class="w-5 h-5 text-sage-500" /> Kiểm duyệt cộng đồng
+        </span>
+        <lucide-icon [img]="ArrowRight" class="w-4 h-4 text-sage-400" />
+      </a>
+      <a routerLink="/admin/content"
+         class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-sage-900 border hairline hover:bg-stone-50 dark:hover:bg-sage-800 transition text-left">
+        <span class="flex items-center gap-3 text-[15px] text-ink dark:text-white">
+          <lucide-icon [img]="ShieldCheck" class="w-5 h-5 text-sage-500" /> Quản lý nội dung (bài viết, cơ sở)
+        </span>
+        <lucide-icon [img]="ArrowRight" class="w-4 h-4 text-sage-400" />
+      </a>
+    }
+    <button (click)="exportData()"
+            class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-sage-900 border hairline hover:bg-stone-50 dark:hover:bg-sage-800 transition text-left">
+      <span class="flex items-center gap-3 text-[15px] text-ink dark:text-white">
+        <lucide-icon [img]="Download" class="w-5 h-5 text-sage-500" /> Tải dữ liệu của tôi (JSON)
+      </span>
+      <lucide-icon [img]="ArrowRight" class="w-4 h-4 text-sage-400" />
+    </button>
+
+    <button (click)="logout()"
+            class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-sage-900 border hairline hover:bg-stone-50 dark:hover:bg-sage-800 transition text-left">
+      <span class="flex items-center gap-3 text-[15px] text-ink dark:text-white">
+        <lucide-icon [img]="LogOut" class="w-5 h-5 text-sage-500" /> Đăng xuất
+      </span>
+      <lucide-icon [img]="ArrowRight" class="w-4 h-4 text-sage-400" />
+    </button>
+
+    <!-- Xóa dữ liệu -->
+    @if (!confirmingDelete()) {
+      <button (click)="confirmingDelete.set(true)"
+              class="w-full flex items-center justify-between p-4 rounded-xl bg-white dark:bg-sage-900 border border-sos-200 dark:border-sos-800 hover:bg-sos-50 dark:hover:bg-sos-900/20 transition text-left">
+        <span class="flex items-center gap-3 text-[15px] text-sos-700 dark:text-sos-300">
+          <lucide-icon [img]="Trash2" class="w-5 h-5" /> Xóa toàn bộ dữ liệu của tôi
+        </span>
+        <lucide-icon [img]="ArrowRight" class="w-4 h-4 text-sos-400" />
+      </button>
+    } @else {
+      <div class="p-5 rounded-xl bg-sos-50 dark:bg-sos-900/20 border border-sos-200 dark:border-sos-800">
+        <div class="flex items-start gap-2 mb-3">
+          <lucide-icon [img]="TriangleAlert" class="w-5 h-5 text-sos-600 dark:text-sos-300 shrink-0 mt-0.5" />
+          <div>
+            <p class="font-semibold text-sos-700 dark:text-sos-200">Xóa vĩnh viễn?</p>
+            <p class="mt-1 text-[13px] text-sos-600 dark:text-sos-300 leading-relaxed">
+              Toàn bộ nhật ký, cảm xúc và tài khoản sẽ bị xóa hoàn toàn và không thể khôi phục.
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button (click)="confirmingDelete.set(false)"
+                  class="flex-1 py-2.5 rounded-lg border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:bg-white dark:hover:bg-sage-800 transition">
+            Hủy
+          </button>
+          <button (click)="deleteAccount()" [disabled]="deleting()"
+                  class="flex-1 py-2.5 rounded-lg bg-sos-600 text-white text-[14px] font-medium hover:bg-sos-700 disabled:opacity-50 transition">
+            {{ deleting() ? 'Đang xóa…' : 'Xóa vĩnh viễn' }}
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

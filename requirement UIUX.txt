@@ -1,0 +1,52 @@
+Bối cảnh dự án:
+Tôi muốn xây dựng một website cẩm nang hỗ trợ và tra cứu dành cho những người đang gặp bất ổn hoặc mắc bệnh tâm lý. Trong bối cảnh hiện nay, rào cản về chi phí, thời gian và tâm lý sợ bị định kiến xã hội khiến nhiều người chọn cách tự chịu đựng thay vì tìm đến chuyên gia. Website này đóng vai trò là một "bước đệm" an toàn, tinh tế, giúp họ hiểu bản thân và bớt lạc lõng.
+
+Nhiệm vụ của bạn:
+Hãy đóng vai trò là một Chuyên gia UI/UX Senior và Full-stack Developer. Thiết kế giao diện (UI/UX) và viết code (sử dụng HTML/Tailwind CSS hoặc Angular component nếu có thể) cho trang chủ (Homepage) và luồng trải nghiệm chính của hệ thống này.
+
+---
+
+### I. TƯ DUY THIẾT KẾ (DESIGN SYSTEM & VIBE)
+- Phong cách: Tối giản (Minimalism), Hiện đại, Tinh tế, Mang tính "chữa lành" và tạo cảm giác an toàn tuyệt đối. Các góc component bo tròn mềm mại (rounded-2xl hoặc rounded-3xl).
+- Tone màu chủ đạo (Color Palette): Sử dụng các gam màu dịu mắt, tránh kích động tâm lý:
+  + Sage Green (Xanh lá xám/xanh xô thơm) làm chủ đạo (tạo cảm giác sinh trưởng, an tâm).
+  + Muted Blue (Xanh dương dịu) làm màu nhấn phụ (tạo sự tin cậy, bình yên).
+  + Nền: Pastel nhẹ, Beige hoặc Off-white. 
+  + Hỗ trợ giao diện Dark Mode dịu mắt cho người dùng lướt web ban đêm.
+- Hiệu ứng (Animations): Chuyển động mượt mà (smooth transition, fade-in), không dùng hiệu ứng thô bạo hoặc pop-up gây giật mình, lo âu.
+
+---
+
+### II. CÁC TÍNH NĂNG CỐT LÕI CẦN THIẾT KẾ TRÊN UI
+
+1. Nút cứu trợ khẩn cấp (SOS Button) - BẮT BUỘC:
+- Thiết kế: Ghim cố định (Sticky) ở góc dưới màn hình. Màu sắc nổi bật nhưng không gây hoảng loạn (ví dụ: Soft Red hoặc Coral).
+- Khi Click: Hiển thị một Modal/Card nhỏ tinh tế chứa ngay số hotline hỗ trợ khủng hoảng, tự sát miễn phí (Ngày Mai, MindCare, v.v.) kèm thông điệp ấm áp: "Bạn không cô đơn, luôn có người sẵn sàng lắng nghe bạn."
+
+2. Phần Tuyên bố từ chối trách nhiệm (Disclaimer) - BẮT BUỘC:
+- Vị trí: Hiển thị rõ ràng ở Footer của toàn trang và một banner nhỏ nằm ngay trước khi người dùng bấm vào làm các bài test.
+- Nội dung: "Các bài test và thông tin trên website chỉ mang tính chất tham khảo, không có giá trị thay thế chẩn đoán y khoa chuyên môn."
+
+3. Phân hệ: Các bài test tâm lý & Trả kết quả (Psychological Tests)
+- Danh mục test: Chỉ sử dụng các thang đo chuẩn quốc tế: DASS-21 (Trầm cảm, Lo âu, Stress), PHQ-9 (Sàng lọc trầm cảm), GAD-7 (Sàng lọc lo âu). Tuyệt đối không dùng test vui.
+- UI Trả kết quả: Cực kỳ tinh tế. Tránh dùng từ ngữ phán xét tiêu cực (Không dùng: "Bạn bị trầm cảm nặng"). Hãy thiết kế UI hiển thị biểu đồ thanh/tròn mềm mại kèm text nhẹ nhàng: "Kết quả cho thấy bạn đang có dấu hiệu lo âu ở mức độ cao. Đừng lo lắng quá, bạn có thể thử các bài tập thở dưới đây hoặc cân nhắc trò chuyện cùng chuyên gia để nhẹ lòng hơn nhé."
+
+4. Phân hệ: Self-Help Tool (Công cụ tự trợ giúp)
+- Thiết kế một Widget/Calendar cho phép "Mood Tracker" (Chấm điểm cảm xúc mỗi ngày: Vui, Bình thường, Lo âu, Giận dữ, Tệ) bằng các biểu tượng emoji tối giản, dễ thương.
+- Khu vực "Journal" (Nhật ký số ẩn danh) và các thẻ (Cards) bài học, lời khuyên ngắn để tốt hơn mỗi ngày.
+
+5. Không gian an toàn / Góc chia sẻ ẩn danh (Safe Space)
+- Giao diện dạng một "Bức tường tâm sự" (Confession Wall) nơi người dùng thả các câu chuyện của mình hoàn toàn ẩn danh.
+- Các user khác chỉ có thể tương tác bằng cách "Thả tim", "Gửi cái ôm" hoặc bình luận những lời chúc tích cực đã qua bộ lọc kiểm duyệt.
+
+6. Bộ lọc thông minh cho Danh sách cơ sở y tế
+- Thiết kế một thanh lọc (Filter Bar) trực quan ở trang danh sách cơ sở: Khu vực (Gần tôi), Chi phí (BHYT, Miễn phí, Bình dân), Hình thức (Online qua Video Call / Offline tại phòng khám).
+
+7. Tiện ích bổ sung:
+- Khu vực hiển thị danh sách bài viết "Lời khuyên từ chuyên gia".
+- Cửa sổ Chatbot AI hỗ trợ lắng nghe và định hướng ban đầu tích hợp ở góc phải.
+
+---
+
+### III. YÊU CẦU ĐẦU RA (OUTPUT REQUIREMENT)
+1. Hãy mô tả ngắn gọn kiến trúc UX/UI và luồng đi của người dùng (User Flow) để đảm bảo tính tiếp cận tốt nhất.

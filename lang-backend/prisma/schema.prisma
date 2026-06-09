@@ -1,0 +1,275 @@
+// ============================================================
+// Lặng — Prisma Schema
+// DB: PostgreSQL
+// Dữ liệu nhạy cảm (journal, mood note, assessment answers)
+// mã hóa AES-256-GCM ở tầng application trước khi lưu
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// USER — guest-first, không bắt buộc đăng ký
+// ============================================================
+model User {
+  id        String    @id @default(cuid())
+  email     String?   @unique
+  password  String?   // bcrypt hash — null nếu guest
+  isGuest   Boolean   @default(false)
+  isAdmin   Boolean   @default(false)
+  under18   Boolean   @default(false)
+  resetTokenHash   String?
+  resetTokenExpiry DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // soft delete — quyền xóa dữ liệu NĐ13
+
+  moods         MoodEntry[]
+  journals      JournalEntry[]
+  assessments   AssessmentResult[]
+  posts         CommunityPost[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+// ============================================================
+// MOOD ENTRY
+// noteEnc: ghi chú đã mã hóa AES-256-GCM
+// ============================================================
+model MoodEntry {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      String    // YYYY-MM-DD
+  mood      MoodLevel
+  noteEnc   String?   // note đã mã hóa
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, date])
+  @@map("mood_entries")
+}
+
+enum MoodLevel {
+  great
+  ok
+  anxious
+  angry
+  bad
+}
+
+// ============================================================
+// JOURNAL ENTRY
+// titleEnc + contentEnc: mã hóa AES-256-GCM
+// ============================================================
+model JournalEntry {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date       String    // YYYY-MM-DD
+  titleEnc   String?
+  contentEnc String    // bắt buộc mã hóa
+  mood       MoodLevel?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("journal_entries")
+}
+
+// ============================================================
+// ASSESSMENT RESULT — tuỳ chọn lưu, cần consent
+// ============================================================
+model AssessmentResult {
+  id              String   @id @default(cuid())
+  userId          String?  // null = ẩn danh
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  testId          TestType
+  scores          Json     // { total } | { d, a, s }
+  answers         Json     // số liệu đã mã hóa
+  q9Score         Int?     // PHQ-9 câu 9 — trigger crisis
+  crisisTriggered Boolean  @default(false)
+  consentGiven    Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  @@map("assessment_results")
+}
+
+enum TestType {
+  phq9
+  gad7
+  dass21
+  epds
+  gds15
+  pss10
+}
+
+// ============================================================
+// COMMUNITY POST — pre-moderation bắt buộc
+// ============================================================
+model CommunityPost {
+  id            String     @id @default(cuid())
+  userId        String?    // null = ẩn danh hiển thị
+  user          User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  content       String
+  status        PostStatus @default(pending)
+  hasCW         Boolean    @default(false)
+  cwLabel       String?
+  likes         Int        @default(0)
+  hugs          Int        @default(0)
+  riskDetected  Boolean    @default(false)
+  moderatorNote String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("community_posts")
+}
+
+enum PostStatus {
+  pending  // chờ kiểm duyệt
+  approved // đã duyệt
+  rejected // từ chối
+  flagged  // bị báo cáo — ưu tiên xem lại
+}
+
+// ============================================================
+// CRISIS EVENT — aggregate only, không lưu thông tin cá nhân
+// ============================================================
+model CrisisEvent {
+  id        String       @id @default(cuid())
+  source    CrisisSource
+  testId    TestType?
+  severity  String?
+  // KHÔNG lưu userId, content, IP hay bất kỳ PII nào
+  createdAt DateTime     @default(now())
+
+  @@map("crisis_events")
+}
+
+enum CrisisSource {
+  phq9_q9
+  dass21_severe
+  community_post
+  chatbot
+  sos_button
+}
+
+// ============================================================
+// ARTICLE — knowledge base
+// ============================================================
+model Article {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  title       String
+  excerpt     String
+  content     String          // markdown
+  category    ArticleCategory
+  readMinutes Int
+  reviewedBy  String
+  tags        String[]
+  sources     String[]        @default([])
+  published   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("articles")
+}
+
+enum ArticleCategory {
+  lo_au
+  tram_cam
+  giac_ngu
+  cang_thang
+  quan_he
+  tu_cham_soc
+}
+
+// ============================================================
+// BOOK
+// ============================================================
+model Book {
+  id               String       @id @default(cuid())
+  title            String
+  author           String
+  excerpt          String
+  category         BookCategory
+  rating           Float
+  coverGradient    String
+  coverUrl         String?
+  detail           String?
+  whyRead          String?
+  reviewedByExpert Boolean      @default(false)
+  published        Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt @default(now())
+
+  @@map("books")
+}
+
+enum BookCategory {
+  tram_cam
+  lo_au
+  chanh_niem
+  chua_lanh
+  y_nghia
+  thoi_quen
+}
+
+// ============================================================
+// FACILITY
+// ============================================================
+model Facility {
+  id          String         @id @default(cuid())
+  name        String
+  description String
+  address     String?
+  area        FacilityArea
+  cost        FacilityCost[]
+  type        FacilityType[]
+  phone       String?
+  website     String?
+  hours       String
+  verified    Boolean        @default(false)
+  tags        String[]
+  published   Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("facilities")
+}
+
+enum FacilityArea {
+  hn
+  hcm
+  dn
+  online
+}
+
+enum FacilityCost {
+  free
+  insurance
+  affordable
+  private_pay
+}
+
+enum FacilityType {
+  online
+  clinic
+  hospital
+}

@@ -1,0 +1,244 @@
+<!-- DISCLAIMER BANNER -->
+<div class="border-b hairline bg-stone-100/60 dark:bg-sage-800/40">
+  <p class="max-w-6xl mx-auto px-5 sm:px-8 py-2.5 text-[13px] text-sage-700 dark:text-stone-200 flex items-center gap-2">
+    <svg class="w-4 h-4 shrink-0 text-sage-500" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 8h.01M11 12h1v4h1"/></svg>
+    Nội dung &amp; bài đánh giá chỉ mang tính <strong class="font-semibold">tham khảo</strong>, không thay thế chẩn đoán y khoa chuyên môn.
+  </p>
+</div>
+
+<!-- HERO -->
+<section class="relative overflow-hidden">
+  <div class="absolute -top-24 -right-24 w-96 h-96 bg-sage-200/30 dark:bg-sage-700/20 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 pt-20 sm:pt-28 pb-16 sm:pb-24 grid lg:grid-cols-12 gap-12 items-center">
+    <div class="lg:col-span-7 fade-up">
+      <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-5">Sức khỏe tâm lý · Tra cứu · Hỗ trợ</p>
+      <h1 class="font-serif text-[2.6rem] sm:text-6xl leading-[1.08] text-ink dark:text-white">
+        Một khoảng lặng<br />để lắng nghe<br />
+        <span class="italic text-sage-600 dark:text-sage-300">chính mình.</span>
+      </h1>
+      <p class="mt-7 max-w-xl text-lg text-sage-800 dark:text-stone-200 leading-relaxed">
+        Hiểu cảm xúc của bạn qua các thang đo chuẩn quốc tế, tra cứu kiến thức tâm lý đáng tin cậy,
+        và tìm sự hỗ trợ phù hợp — trong không gian riêng tư, không phán xét.
+      </p>
+      <div class="mt-9 flex flex-col sm:flex-row gap-3">
+        <a routerLink="/assessment"
+           class="inline-flex justify-center items-center px-7 py-3.5 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 transition">
+          Làm bài đánh giá
+        </a>
+        <a routerLink="/knowledge"
+           class="inline-flex justify-center items-center px-7 py-3.5 rounded-lg bg-white dark:bg-sage-800 text-sage-700 dark:text-stone-100 font-medium border hairline hover:bg-stone-100 dark:hover:bg-sage-700 transition">
+          Tra cứu kiến thức
+        </a>
+      </div>
+      <p class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-sage-600 dark:text-stone-300">
+        <span class="flex items-center gap-1.5">
+          <lucide-icon [img]="CircleCheck" class="w-[18px] h-[18px] text-sage-500" /> Miễn phí
+        </span>
+        <span class="flex items-center gap-1.5">
+          <lucide-icon [img]="ShieldCheck" class="w-[18px] h-[18px] text-sage-500" /> Ẩn danh
+        </span>
+        <span class="flex items-center gap-1.5">
+          <lucide-icon [img]="UserRoundX" class="w-[18px] h-[18px] text-sage-500" /> Không cần đăng nhập
+        </span>
+      </p>
+    </div>
+
+    <!-- Visual breathe -->
+    <div class="lg:col-span-5 hidden lg:flex justify-center fade-up">
+      <div class="relative w-72 h-72">
+        <div class="absolute inset-0 rounded-full border border-sage-200 dark:border-sage-700"></div>
+        <div class="absolute inset-6 rounded-full border border-sage-200 dark:border-sage-700"></div>
+        <div class="absolute inset-12 rounded-full bg-gradient-to-br from-sage-100 to-stone-100 dark:from-sage-800 dark:to-sage-700 grid place-items-center">
+          <div class="w-28 h-28 rounded-full bg-sage-300/50 dark:bg-sage-600/40 breathe"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LỜI KHUYÊN HÔM NAY -->
+<section class="max-w-6xl mx-auto px-5 sm:px-8 pb-4">
+  <div class="rounded-2xl border hairline bg-gradient-to-br from-sage-50 to-calm-50 dark:from-sage-800 dark:to-sage-900 p-7 sm:p-9 relative overflow-hidden">
+    <div class="absolute -top-10 -right-8 w-40 h-40 bg-sage-200/40 dark:bg-sage-700/30 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="relative flex items-start gap-4">
+      <span class="icon-chip shrink-0 inline-grid"><lucide-icon [img]="Sparkles" class="w-5 h-5" /></span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <p class="text-[12px] uppercase tracking-[0.16em] text-sage-500 font-medium">Lời khuyên hôm nay · {{ tip().category }}</p>
+          <button (click)="nextTip()" aria-label="Xem lời khuyên khác"
+                  class="inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-300 hover:text-sage-800 dark:hover:text-white transition shrink-0">
+            <lucide-icon [img]="RefreshCw" class="w-3.5 h-3.5" /> Thẻ khác
+          </button>
+        </div>
+        <p class="font-serif text-xl sm:text-2xl text-ink dark:text-white leading-snug">{{ tip().text }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ĐÁNH GIÁ -->
+<section id="tests" class="max-w-6xl mx-auto px-5 sm:px-8 py-20 border-t hairline scroll-mt-20">
+  <div class="max-w-2xl mb-12">
+    <h2 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Lắng nghe bản thân</h2>
+    <p class="mt-4 text-sage-800 dark:text-stone-200 leading-relaxed">Các thang đo chuẩn quốc tế, đã được kiểm định. Kết quả giúp bạn hiểu mình hơn — riêng tư và không phán xét.</p>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-stone-200 dark:bg-sage-700 rounded-xl overflow-hidden border hairline">
+    <article class="group bg-stone-50 dark:bg-sage-800 p-8 hover:bg-white dark:hover:bg-sage-700/60 transition">
+      <span class="icon-chip mb-6 inline-grid"><lucide-icon [img]="CloudDrizzle" class="w-5 h-5" /></span>
+      <div class="flex items-baseline justify-between">
+        <h3 class="font-serif text-xl text-ink dark:text-white">PHQ-9</h3>
+        <span class="text-xs text-sage-500">9 câu · ~3 phút</span>
+      </div>
+      <p class="mt-2.5 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">Sàng lọc dấu hiệu trầm cảm theo tiêu chuẩn lâm sàng.</p>
+      <a routerLink="/assessment" [queryParams]="{test:'phq9'}"
+         class="mt-6 inline-flex items-center gap-1.5 text-sage-700 dark:text-sage-300 font-medium text-[14px] group-hover:gap-2.5 transition-all">
+        Bắt đầu <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </a>
+    </article>
+    <article class="group bg-stone-50 dark:bg-sage-800 p-8 hover:bg-white dark:hover:bg-sage-700/60 transition">
+      <span class="icon-chip mb-6 inline-grid"><lucide-icon [img]="Wind" class="w-5 h-5" /></span>
+      <div class="flex items-baseline justify-between">
+        <h3 class="font-serif text-xl text-ink dark:text-white">GAD-7</h3>
+        <span class="text-xs text-sage-500">7 câu · ~2 phút</span>
+      </div>
+      <p class="mt-2.5 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">Sàng lọc dấu hiệu lo âu lan tỏa.</p>
+      <a routerLink="/assessment" [queryParams]="{test:'gad7'}"
+         class="mt-6 inline-flex items-center gap-1.5 text-sage-700 dark:text-sage-300 font-medium text-[14px] group-hover:gap-2.5 transition-all">
+        Bắt đầu <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </a>
+    </article>
+    <article class="group bg-stone-50 dark:bg-sage-800 p-8 hover:bg-white dark:hover:bg-sage-700/60 transition">
+      <span class="icon-chip mb-6 inline-grid"><lucide-icon [img]="ChartNoAxesColumn" class="w-5 h-5" /></span>
+      <div class="flex items-baseline justify-between">
+        <h3 class="font-serif text-xl text-ink dark:text-white">DASS-21</h3>
+        <span class="text-xs text-sage-500">21 câu · ~5 phút</span>
+      </div>
+      <p class="mt-2.5 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">Đánh giá đồng thời trầm cảm, lo âu &amp; căng thẳng.</p>
+      <a routerLink="/assessment" [queryParams]="{test:'dass21'}"
+         class="mt-6 inline-flex items-center gap-1.5 text-sage-700 dark:text-sage-300 font-medium text-[14px] group-hover:gap-2.5 transition-all">
+        Bắt đầu <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </a>
+    </article>
+  </div>
+</section>
+
+<!-- KNOWLEDGE BASE SEARCH -->
+<section id="knowledge" class="bg-stone-100 dark:bg-sage-800/40 border-y hairline py-20 scroll-mt-20">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+    <h2 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Tra cứu cẩm nang</h2>
+    <p class="mt-4 text-sage-800 dark:text-stone-200 leading-relaxed">Kiến thức được chuyên gia lâm sàng review và trích dẫn nguồn. Rõ ràng, không gây hoang mang.</p>
+    <div class="mt-8">
+      <label for="kb-search" class="sr-only">Tìm kiếm chủ đề tâm lý</label>
+      <div class="relative">
+        <lucide-icon [img]="Search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-sage-400 pointer-events-none" />
+        <input id="kb-search" type="search" placeholder="Tìm: lo âu, mất ngủ, căng thẳng…"
+               class="w-full pl-12 pr-4 py-4 rounded-lg bg-white dark:bg-sage-800 border hairline text-ink dark:text-white placeholder:text-sage-400 focus:border-sage-500 transition" />
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2 justify-center">
+        @for (tag of ['Lo âu','Trầm cảm','Giấc ngủ','Căng thẳng','Mối quan hệ']; track tag) {
+          <a routerLink="/knowledge" [queryParams]="{q: tag}"
+             class="px-4 py-1.5 rounded-full bg-white dark:bg-sage-800 border hairline text-[14px] text-sage-700 dark:text-stone-200 hover:border-sage-500 transition cursor-pointer">
+            {{ tag }}
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SELF HELP -->
+<section id="selfhelp" class="max-w-6xl mx-auto px-5 sm:px-8 py-20 scroll-mt-20">
+  <div class="max-w-2xl mb-12">
+    <h2 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Tự chăm sóc mỗi ngày</h2>
+    <p class="mt-4 text-sage-800 dark:text-stone-200 leading-relaxed">Những công cụ nhỏ, dùng đều đặn. Dữ liệu lưu ngay trên thiết bị của bạn.</p>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6">
+    <!-- Mood tracker -->
+    <div class="bg-white dark:bg-sage-900 rounded-xl p-7 shadow-[var(--shadow-card)] border hairline">
+      <h3 class="font-serif text-lg text-ink dark:text-white">Hôm nay bạn thế nào?</h3>
+      <div class="mt-6 grid grid-cols-5 gap-2" role="group" aria-label="Chọn tâm trạng hôm nay">
+        @for (m of moodIcons; track m.level) {
+          <button (click)="logMood(m.level)"
+                  [attr.aria-label]="'Ghi cảm xúc: ' + m.meta.label"
+                  [attr.data-tip]="m.meta.label"
+                  class="tip flex flex-col items-center gap-2 group">
+            <span class="w-11 h-11 rounded-full grid place-items-center group-hover:ring-4 ring-sage-100 dark:ring-sage-700/60 group-hover:scale-105 transition"
+                  [class]="m.meta.colorClass">
+              <lucide-icon [img]="m.icon" class="w-[22px] h-[22px]" />
+            </span>
+            <span class="text-[11px] text-sage-600 dark:text-stone-300">{{ m.meta.label }}</span>
+          </button>
+        }
+      </div>
+      <a routerLink="/mood"
+         class="mt-6 inline-flex items-center gap-1.5 text-[13px] font-medium text-sage-700 dark:text-sage-300 hover:gap-2.5 transition-all">
+        Xem lịch sử cảm xúc <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </a>
+    </div>
+
+    <!-- Breathing -->
+    <a routerLink="/breathe"
+       class="rounded-xl p-7 shadow-[var(--shadow-card)] border hairline bg-gradient-to-br from-sage-50 to-stone-100 dark:from-sage-800 dark:to-sage-800 flex flex-col items-center justify-center text-center hover:shadow-[var(--shadow-lift)] hover:-translate-y-0.5 transition-all">
+      <div class="w-16 h-16 rounded-full bg-sage-300/60 dark:bg-sage-600/50 breathe"></div>
+      <h3 class="mt-6 font-serif text-lg text-ink dark:text-white">Bài tập thở</h3>
+      <p class="mt-1.5 text-[13px] text-sage-600 dark:text-stone-300">4-7-8 · Box · Thở bụng — có hướng dẫn động.</p>
+      <span class="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-sage-700 dark:text-sage-300">
+        Bắt đầu <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </span>
+    </a>
+
+    <!-- Journal -->
+    <div class="bg-white dark:bg-sage-900 rounded-xl p-7 shadow-[var(--shadow-card)] border hairline">
+      <span class="icon-chip mb-5 inline-grid"><lucide-icon [img]="NotebookPen" class="w-5 h-5" /></span>
+      <h3 class="font-serif text-lg text-ink dark:text-white">Nhật ký số</h3>
+      <p class="mt-2.5 text-[15px] text-sage-800 dark:text-stone-200 leading-relaxed">Viết ra những gì trong lòng. Lưu riêng tư trên thiết bị của bạn — không ai khác đọc được.</p>
+      <a routerLink="/journal"
+         class="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-sage-700 dark:text-sage-300 hover:gap-2.5 transition-all">
+        Mở nhật ký <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </a>
+      <p class="mt-3 inline-flex items-center gap-1.5 text-[12px] text-sage-600 dark:text-stone-300">
+        <lucide-icon [img]="Lock" class="w-3.5 h-3.5" /> Bảo mật trên thiết bị
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITIES FILTER -->
+<section id="facilities" class="bg-stone-100 dark:bg-sage-800/40 border-y hairline py-20 scroll-mt-20">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+    <div class="max-w-2xl mb-10">
+      <h2 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Tìm cơ sở hỗ trợ</h2>
+      <p class="mt-4 text-sage-800 dark:text-stone-200 leading-relaxed">Lọc theo khu vực, chi phí và hình thức phù hợp với bạn. Ưu tiên cơ sở đã xác minh.</p>
+    </div>
+    <div class="bg-white dark:bg-sage-900 rounded-xl p-4 shadow-[var(--shadow-card)] border hairline flex flex-col sm:flex-row gap-3">
+      <div class="relative flex-1">
+        <lucide-icon [img]="MapPin" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-500 pointer-events-none" />
+        <select class="w-full appearance-none pl-12 pr-9 py-3 rounded-lg bg-stone-50 dark:bg-sage-700 border hairline text-ink dark:text-white cursor-pointer" aria-label="Khu vực">
+          <option>Khu vực — Gần tôi</option>
+          <option>Hà Nội</option><option>TP. Hồ Chí Minh</option><option>Đà Nẵng</option>
+        </select>
+        <lucide-icon [img]="ChevronDown" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sage-400 pointer-events-none" />
+      </div>
+      <div class="relative flex-1">
+        <lucide-icon [img]="Wallet" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-500 pointer-events-none" />
+        <select class="w-full appearance-none pl-12 pr-9 py-3 rounded-lg bg-stone-50 dark:bg-sage-700 border hairline text-ink dark:text-white cursor-pointer" aria-label="Chi phí">
+          <option>Chi phí — Tất cả</option>
+          <option>BHYT</option><option>Miễn phí</option><option>Bình dân</option>
+        </select>
+        <lucide-icon [img]="ChevronDown" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sage-400 pointer-events-none" />
+      </div>
+      <div class="relative flex-1">
+        <lucide-icon [img]="Stethoscope" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-sage-500 pointer-events-none" />
+        <select class="w-full appearance-none pl-12 pr-9 py-3 rounded-lg bg-stone-50 dark:bg-sage-700 border hairline text-ink dark:text-white cursor-pointer" aria-label="Hình thức">
+          <option>Hình thức — Tất cả</option>
+          <option>Online (video call)</option><option>Tại phòng khám</option>
+        </select>
+        <lucide-icon [img]="ChevronDown" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sage-400 pointer-events-none" />
+      </div>
+      <a routerLink="/facilities"
+         class="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 transition shrink-0">
+        <lucide-icon [img]="Search" class="w-[18px] h-[18px]" /> Tìm
+      </a>
+    </div>
+  </div>
+</section>

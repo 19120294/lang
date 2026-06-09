@@ -1,0 +1,96 @@
+<div class="max-w-3xl mx-auto px-5 sm:px-8 py-12">
+
+  <a routerLink="/assessment" class="inline-flex items-center gap-1.5 text-[14px] text-sage-600 dark:text-stone-300 hover:text-sage-700 mb-8 transition">
+    <lucide-icon [img]="ArrowLeft" class="w-4 h-4" /> Quay lại đánh giá
+  </a>
+
+  <div class="fade-up">
+    <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-3">Theo dõi</p>
+    <h1 class="font-serif text-3xl sm:text-4xl text-ink dark:text-white">Lịch sử đánh giá</h1>
+    <p class="mt-3 text-[14px] text-sage-600 dark:text-stone-300 inline-flex items-center gap-2">
+      <lucide-icon [img]="Lock" class="w-4 h-4" /> Chỉ mình bạn xem được. Dữ liệu được mã hóa.
+    </p>
+  </div>
+
+  @if (loading()) {
+    <p class="mt-10 text-center text-sage-500">Đang tải…</p>
+  } @else if (items().length === 0 && !isLoggedIn()) {
+    <div class="mt-10 text-center py-16">
+      <p class="font-serif text-2xl text-ink dark:text-white mb-2">Cần đăng nhập</p>
+      <p class="text-[14px] text-sage-600 dark:text-stone-300 mb-5">Đăng nhập để lưu và so sánh kết quả đánh giá theo thời gian.</p>
+      <button (click)="goAuth()" class="px-6 py-3 rounded-lg bg-sage-700 text-white font-medium hover:bg-sage-800 transition">Đăng nhập</button>
+    </div>
+  } @else if (items().length === 0) {
+    <div class="mt-10 text-center py-16 text-sage-500 dark:text-stone-300">
+      <span class="inline-grid place-items-center w-14 h-14 rounded-full bg-sage-100 dark:bg-sage-700 text-sage-500 mb-4">
+        <lucide-icon [img]="Inbox" class="w-7 h-7" />
+      </span>
+      <p class="font-serif text-xl text-ink dark:text-white mb-1">Chưa có kết quả nào</p>
+      <p class="text-[14px] mb-5">Làm một bài đánh giá và chọn "Lưu kết quả" để bắt đầu theo dõi.</p>
+      <a routerLink="/assessment" class="inline-flex items-center gap-1.5 text-sage-700 dark:text-sage-300 font-medium hover:underline">
+        Làm bài đánh giá <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+      </a>
+    </div>
+  } @else {
+    <!-- Chọn thang đo -->
+    <div class="mt-8 flex flex-wrap gap-2">
+      @for (id of testsWithData(); track id) {
+        <button (click)="selectTest(id)"
+                class="px-4 py-1.5 rounded-full text-[14px] border transition"
+                [class.bg-sage-700]="selectedTest() === id" [class.text-white]="selectedTest() === id"
+                [class.bg-white]="selectedTest() !== id" [class.dark:bg-sage-800]="selectedTest() !== id"
+                [class.text-sage-700]="selectedTest() !== id" [class.dark:text-stone-200]="selectedTest() !== id"
+                [class.hairline]="selectedTest() !== id">
+          {{ testName(id) }}
+        </button>
+      }
+    </div>
+
+    <!-- Biểu đồ so sánh -->
+    <div class="mt-6 bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6">
+      <div class="flex items-center gap-2 mb-1">
+        <lucide-icon [img]="TrendingUp" class="w-5 h-5 text-sage-500" />
+        <h2 class="font-serif text-xl text-ink dark:text-white">Xu hướng {{ testName(selectedTest()) }}</h2>
+      </div>
+      <p class="text-[13px] text-sage-500 mb-3">Điểm thấp hơn = tích cực hơn. Trục dọc 0–{{ series().max }}.</p>
+
+      @if (change(); as c) {
+        <p class="inline-flex items-center gap-1.5 text-[13px] font-medium mb-4 px-3 py-1 rounded-full"
+           [class.bg-sage-50]="c <= 0" [class.text-sage-700]="c <= 0" [class.dark:bg-sage-800]="c <= 0" [class.dark:text-sage-200]="c <= 0"
+           [class.bg-sos-50]="c > 0" [class.text-sos-700]="c > 0" [class.dark:bg-sos-900]="c > 0" [class.dark:text-sos-300]="c > 0">
+          @if (c < 0) { ↓ Giảm {{ -c }} điểm so với lần đầu — bạn đang tiến triển 💚 }
+          @else if (c > 0) { ↑ Tăng {{ c }} điểm so với lần đầu — hãy chú ý chăm sóc bản thân }
+          @else { → Không đổi so với lần đầu }
+        </p>
+      }
+
+      @if (series().hasData) {
+        <svg viewBox="0 0 300 100" preserveAspectRatio="none" class="w-full" style="height:160px"
+             role="img" aria-label="Biểu đồ xu hướng điểm đánh giá theo thời gian">
+          @for (g of [5, 27.5, 50, 72.5, 95]; track g) {
+            <line x1="0" [attr.y1]="g" x2="300" [attr.y2]="g" stroke="currentColor" class="text-stone-200 dark:text-sage-700" stroke-width="0.5" />
+          }
+          @if (series().points.length > 1) {
+            <polyline [attr.points]="series().path" fill="none" stroke="currentColor" class="text-sage-500" stroke-width="1.5" stroke-linejoin="round" />
+          }
+          @for (p of series().points; track p.date) {
+            <circle [attr.cx]="p.x" [attr.cy]="p.y" r="3" class="fill-sage-600" stroke="white" stroke-width="0.8" />
+          }
+        </svg>
+      }
+    </div>
+
+    <!-- Danh sách kết quả -->
+    <div class="mt-8">
+      <h2 class="font-serif text-xl text-ink dark:text-white mb-4">Các lần đã làm</h2>
+      <div class="space-y-3">
+        @for (p of series().points.slice().reverse(); track p.date) {
+          <div class="flex items-center justify-between bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-4">
+            <span class="text-[14px] text-sage-700 dark:text-stone-200">{{ formatDate(p.date) }}</span>
+            <span class="font-serif text-xl text-ink dark:text-white">{{ p.total }}<span class="text-[12px] text-sage-500 ml-1">/{{ series().max }}</span></span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

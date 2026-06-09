@@ -1,0 +1,117 @@
+<!-- Bubble — lùi lên trên SOS, không che SOS -->
+<button (click)="toggle()"
+        aria-label="Trò chuyện cùng trợ lý"
+        class="fixed bottom-[5.5rem] right-5 z-[70] grid place-items-center w-12 h-12 rounded-full bg-white dark:bg-sage-700 text-sage-700 dark:text-stone-100 border hairline shadow-[var(--shadow-card)] hover:bg-stone-100 dark:hover:bg-sage-600 transition">
+  @if (open()) {
+    <lucide-icon [img]="X" class="w-5 h-5" />
+  } @else {
+    <lucide-icon [img]="MessageCircle" class="w-5 h-5" />
+  }
+</button>
+
+<!-- Panel -->
+@if (open()) {
+  <div class="fixed z-[75] flex flex-col bg-white dark:bg-sage-800 rounded-2xl shadow-[var(--shadow-lift)] border hairline overflow-hidden fade-up
+              left-4 right-4 top-[84px] bottom-[150px]
+              sm:left-auto sm:top-auto sm:right-5 sm:bottom-[9.5rem] sm:w-[380px] sm:h-[520px] sm:max-h-[calc(100dvh-12rem)]">
+    <!-- Header -->
+    <div class="flex items-center gap-3 p-4 border-b hairline bg-sage-50 dark:bg-sage-900">
+      <span class="grid place-items-center w-9 h-9 rounded-full bg-sage-600 text-white">
+        <lucide-icon [img]="Bot" class="w-5 h-5" />
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="font-medium text-ink dark:text-white text-[14px] leading-tight">Trợ lý Lặng</p>
+        <p class="text-[11px] text-sage-500">Lắng nghe & định hướng · không chẩn đoán</p>
+      </div>
+      <button (click)="clearChat()" aria-label="Xóa cuộc trò chuyện"
+              class="text-[12px] text-sage-500 hover:text-sage-700 dark:hover:text-stone-200 transition shrink-0">
+        Làm mới
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div #scrollBox class="flex-1 overflow-y-auto scroll-soft p-4 space-y-3" role="log" aria-live="polite" aria-label="Cuộc trò chuyện">
+      @for (m of messages(); track $index) {
+        @if (m.from === 'bot') {
+          <div class="flex gap-2">
+            <span class="grid place-items-center w-7 h-7 rounded-full shrink-0 mt-0.5"
+                  [class.bg-sos-100]="m.isCrisis" [class.text-sos-600]="m.isCrisis"
+                  [class.dark:bg-sos-900]="m.isCrisis" [class.dark:text-sos-300]="m.isCrisis"
+                  [class.bg-sage-100]="!m.isCrisis" [class.text-sage-600]="!m.isCrisis"
+                  [class.dark:bg-sage-700]="!m.isCrisis" [class.dark:text-sage-200]="!m.isCrisis">
+              <lucide-icon [img]="m.isCrisis ? LifeBuoy : Bot" class="w-4 h-4" />
+            </span>
+            <div class="max-w-[80%]">
+              <div class="px-3.5 py-2.5 rounded-2xl rounded-tl-sm text-[14px] leading-relaxed"
+                   [class.bg-sos-50]="m.isCrisis" [class.text-sos-700]="m.isCrisis"
+                   [class.dark:bg-sos-900/30]="m.isCrisis" [class.dark:text-sos-200]="m.isCrisis"
+                   [class.border]="m.isCrisis" [class.border-sos-200]="m.isCrisis"
+                   [class.bg-stone-100]="!m.isCrisis" [class.text-sage-800]="!m.isCrisis"
+                   [class.dark:bg-sage-700]="!m.isCrisis" [class.dark:text-stone-100]="!m.isCrisis">
+                {{ m.text }}
+              </div>
+              @if (m.isCrisis) {
+                <button (click)="crisis.openSos()"
+                        class="mt-2 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sos-600 text-white text-[13px] font-medium hover:bg-sos-700 transition">
+                  <lucide-icon [img]="LifeBuoy" class="w-4 h-4" /> Xem hỗ trợ khẩn cấp
+                </button>
+              }
+              @if (m.action) {
+                <button (click)="goAction(m.action.route)"
+                        class="mt-2 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sage-700 text-white text-[13px] font-medium hover:bg-sage-800 transition">
+                  {{ m.action.label }}
+                </button>
+              }
+            </div>
+          </div>
+        } @else {
+          <div class="flex justify-end">
+            <div class="max-w-[80%] px-3.5 py-2.5 rounded-2xl rounded-tr-sm bg-sage-600 text-white text-[14px] leading-relaxed">
+              {{ m.text }}
+            </div>
+          </div>
+        }
+      }
+
+      <!-- Typing indicator -->
+      @if (typing()) {
+        <div class="flex gap-2" aria-label="Trợ lý đang trả lời">
+          <span class="grid place-items-center w-7 h-7 rounded-full shrink-0 mt-0.5 bg-sage-100 text-sage-600 dark:bg-sage-700 dark:text-sage-200">
+            <lucide-icon [img]="Bot" class="w-4 h-4" />
+          </span>
+          <div class="px-4 py-3 rounded-2xl rounded-tl-sm bg-stone-100 dark:bg-sage-700 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-sage-400 animate-bounce" style="animation-delay:0ms"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-sage-400 animate-bounce" style="animation-delay:150ms"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-sage-400 animate-bounce" style="animation-delay:300ms"></span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Quick replies — luôn hiển thị, cuộn ngang để gợi ý nhanh -->
+    <div class="px-3 pt-2 pb-1 flex gap-1.5 overflow-x-auto scroll-none border-t hairline">
+      @for (q of quickReplies; track q) {
+        <button (click)="sendQuick(q)" [disabled]="typing()"
+                class="shrink-0 px-3 py-1.5 rounded-full bg-sage-50 dark:bg-sage-700 border hairline text-[12px] text-sage-700 dark:text-stone-200 hover:border-sage-400 disabled:opacity-50 transition whitespace-nowrap">
+          {{ q }}
+        </button>
+      }
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="px-4 py-2 text-[11px] text-sage-500 border-t hairline bg-stone-50 dark:bg-sage-900 leading-snug">
+      Trợ lý chỉ mang tính tham khảo, không thay thế chuyên gia. Khẩn cấp: bấm "Cần hỗ trợ ngay" hoặc gọi 115.
+    </p>
+
+    <!-- Input -->
+    <form (ngSubmit)="send()" class="flex items-center gap-2 p-3 border-t hairline">
+      <input [ngModel]="draft()" (ngModelChange)="draft.set($event)" name="msg"
+             placeholder="Nhập tin nhắn…" autocomplete="off"
+             class="flex-1 px-3.5 py-2.5 rounded-lg bg-stone-50 dark:bg-sage-700 border hairline text-ink dark:text-white placeholder:text-sage-400 text-[14px] focus:border-sage-500 transition" />
+      <button type="submit" [disabled]="!canSend()" aria-label="Gửi"
+              class="grid place-items-center w-10 h-10 rounded-lg bg-sage-700 text-white hover:bg-sage-800 disabled:opacity-40 transition shrink-0">
+        <lucide-icon [img]="Send" class="w-4 h-4" />
+      </button>
+    </form>
+  </div>
+}

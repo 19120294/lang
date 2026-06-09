@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DARK MODE — Tailwind v4 cần khai báo custom variant
+   class="dark" trên <html> → tất cả dark: classes hoạt động
+   ============================================================ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+@theme {
+  --font-sans: "Be Vietnam Pro", system-ui, sans-serif;
+  --font-serif: "Lora", Georgia, serif;
+
+  /* Sage green */
+  --color-sage-50:  #f4f6f4;
+  --color-sage-100: #e6ebe6;
+  --color-sage-200: #cdd7cd;
+  --color-sage-300: #a9bbab;
+  --color-sage-400: #7f9882;
+  --color-sage-500: #5f7a63;
+  --color-sage-600: #4b614f;
+  --color-sage-700: #3d4e40;
+  --color-sage-800: #323f35;
+  --color-sage-900: #2a342c;
+  --color-sage-950: #1a2119;
+
+  /* Warm stone */
+  --color-stone-50:  #faf9f6;
+  --color-stone-100: #f3f1ea;
+  --color-stone-200: #e7e3d8;
+  --color-stone-300: #d4cdbd;
+  --color-stone-400: #b6ae9c;
+  --color-stone-500: #8c8676;
+  --color-stone-600: #6f6a5d;
+  --color-stone-700: #5a564b;
+  --color-stone-800: #403d36;
+  --color-stone-900: #2b2924;
+
+  /* Calm blue — nhấn phụ */
+  --color-calm-100: #dde8f0;
+  --color-calm-200: #b8d2e3;
+  --color-calm-300: #8ab4ce;
+  --color-calm-400: #5d94b5;
+  --color-calm-500: #3e7595;
+  --color-calm-600: #2f5c78;
+
+  /* Terracotta SOS */
+  --color-sos-50:  #fbf2ee;
+  --color-sos-100: #f5e0d7;
+  --color-sos-200: #e9c0b0;
+  --color-sos-300: #d99a82;
+  --color-sos-400: #c87358;
+  --color-sos-500: #b5573c;
+  --color-sos-600: #9c4631;
+  --color-sos-700: #7f3a2a;
+  --color-sos-800: #683227;
+  --color-sos-900: #562b23;
+
+  /* Ink */
+  --color-ink: #1e2720;
+
+  --shadow-card: 0 1px 2px rgba(34,43,37,.05), 0 8px 24px -16px rgba(34,43,37,.18);
+  --shadow-lift: 0 2px 4px rgba(34,43,37,.06), 0 18px 40px -22px rgba(34,43,37,.30);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(95,122,99,.30) transparent;
+}
+html::-webkit-scrollbar { width: 10px; }
+html::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb {
+  background: rgba(95,122,99,.30);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+html::-webkit-scrollbar-thumb:hover { background: rgba(95,122,99,.5); background-clip: padding-box; }
+.dark html::-webkit-scrollbar-thumb, html.dark::-webkit-scrollbar-thumb { background: rgba(169,187,171,.25); background-clip: padding-box; }
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-color: var(--color-stone-50);
+  color: var(--color-ink);
+  letter-spacing: -0.011em;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* Dark mode body */
+.dark body {
+  background-color: var(--color-sage-950);
+  color: #e8ede9;
+}
+
+h1, h2, h3, h4 { letter-spacing: -0.013em; line-height: 1.15; }
+
+/* WCAG AA focus */
+:focus-visible {
+  outline: 2px solid var(--color-sage-600);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   DARK MODE SURFACE OVERRIDES
+   Đặt trực tiếp ở đây để chắc chắn override được
+   ============================================================ */
+.dark {
+  background-color: var(--color-sage-950);
+  color: #e8ede9;
+}
+
+.dark header {
+  background-color: rgba(26, 33, 25, 0.85);
+  border-color: rgba(255,255,255,.07);
+}
+
+.dark footer {
+  background-color: var(--color-sage-950);
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.hairline { border-color: rgba(34,43,37,.12); }
+.dark .hairline { border-color: rgba(255,255,255,.09); }
+
+/* ============================================================
+   SCROLLBAR — mảnh, mềm, đúng tông sage
+   ============================================================ */
+.scroll-soft { scrollbar-width: thin; scrollbar-color: rgba(95,122,99,.35) transparent; }
+.scroll-soft::-webkit-scrollbar { width: 7px; height: 7px; }
+.scroll-soft::-webkit-scrollbar-track { background: transparent; }
+.scroll-soft::-webkit-scrollbar-thumb {
+  background: rgba(95,122,99,.32);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.scroll-soft::-webkit-scrollbar-thumb:hover { background: rgba(95,122,99,.55); background-clip: padding-box; }
+.dark .scroll-soft { scrollbar-color: rgba(169,187,171,.28) transparent; }
+.dark .scroll-soft::-webkit-scrollbar-thumb { background: rgba(169,187,171,.25); background-clip: padding-box; }
+.dark .scroll-soft::-webkit-scrollbar-thumb:hover { background: rgba(169,187,171,.45); background-clip: padding-box; }
+
+/* Ẩn hẳn thanh cuộn ngang cho hàng chip gợi ý */
+.scroll-none { scrollbar-width: none; }
+.scroll-none::-webkit-scrollbar { display: none; }
+
+/* Căn icon Lucide — tránh icon dính/lệch baseline so với text */
+lucide-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+  line-height: 0;
+}
+/* SVG co vừa kích thước của host (class w-[..] h-[..]) — tránh icon 24px tràn ra,
+   đè vào text/placeholder bên cạnh */
+lucide-icon svg { display: block; width: 100%; height: 100%; }
+
+/* Input dùng chung cho form admin */
+.lang-input {
+  margin-top: 0.375rem;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  background: var(--color-stone-50);
+  border: 1px solid var(--color-stone-200);
+  color: var(--color-ink);
+  font-size: 14px;
+  transition: border-color 0.15s;
+}
+.lang-input:focus { outline: none; border-color: var(--color-sage-500); }
+.dark .lang-input {
+  background: var(--color-sage-800);
+  border-color: var(--color-sage-700);
+  color: #fff;
+}
+
+/* Tooltip nhẹ khi hover (dùng cho icon cảm xúc) */
+.tip { position: relative; }
+.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 6px 9px;
+  border-radius: 7px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 60;
+}
+.tip::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+  z-index: 60;
+}
+.tip:hover::after, .tip:focus-visible::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+.tip:hover::before, .tip:focus-visible::before { opacity: 1; }
+.dark .tip::after { background: #e8ede9; color: var(--color-ink); }
+.dark .tip::before { border-top-color: #e8ede9; }
+
+/* Icon chip */
+.icon-chip {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: .875rem;
+  background: linear-gradient(160deg, #eef2ee, #dfe9e0);
+  color: #3d4e40;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 1px 3px rgba(34,43,37,.08);
+}
+.dark .icon-chip {
+  background: linear-gradient(160deg, #2d3d30, #253029);
+  color: #a9bbab;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Card surfaces */
+.dark .card-surface {
+  background-color: #232e25;
+  border-color: rgba(255,255,255,.08);
+}
+
+/* Breathe animation */
+@keyframes breathe {
+  0%, 100% { transform: scale(.78); opacity: .7; }
+  50%       { transform: scale(1); opacity: 1; }
+}
+.breathe { animation: breathe 5s ease-in-out infinite; }
+
+/* Fade-up */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up .65s cubic-bezier(.16,1,.3,1) both; }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lịch sử cảm xúc · Lặng</title>
+  <meta name="description" content="Xem lại nhật ký cảm xúc của bạn theo tuần và tháng. Dữ liệu lưu riêng tư trên thiết bị." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+    tailwind.config = { darkMode:'class', theme:{ extend:{
+      fontFamily:{ sans:['"Be Vietnam Pro"','system-ui','sans-serif'], serif:['"Lora"','Georgia','serif'] },
+      colors:{
+        sage:{50:'#f4f6f4',100:'#e6ebe6',200:'#cdd7cd',300:'#a9bbab',400:'#7f9882',500:'#5f7a63',600:'#4b614f',700:'#3d4e40',800:'#323f35',900:'#2a342c'},
+        stone:{50:'#faf9f6',100:'#f3f1ea',200:'#e7e3d8',300:'#d4cdbd',400:'#b6ae9c',500:'#8c8676',600:'#6f6a5d',700:'#5a564b',800:'#403d36',900:'#2b2924'},
+        sos:{50:'#fbf2ee',100:'#f5e0d7',200:'#e9c0b0',300:'#d99a82',400:'#c87358',500:'#b5573c',600:'#9c4631',700:'#7f3a2a',800:'#683227',900:'#562b23'},
+        ink:'#222b25'
+      },
+      letterSpacing:{ tightish:'-0.011em' },
+      boxShadow:{ card:'0 1px 2px rgba(34,43,37,.04), 0 8px 24px -16px rgba(34,43,37,.16)', lift:'0 2px 4px rgba(34,43,37,.05), 0 18px 40px -22px rgba(34,43,37,.28)' }
+    }}}
+  </script>
+  <style>
+    body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    h1,h2,h3{letter-spacing:-0.012em}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+    :focus-visible{outline:2px solid #4b614f;outline-offset:3px;border-radius:4px}
+    .hairline{border-color:rgba(34,43,37,.10)}.dark .hairline{border-color:rgba(255,255,255,.08)}
+    [data-lucide]{display:inline-block;vertical-align:middle}
+    .chip{display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:.875rem;background:linear-gradient(160deg,#eef2ee,#e1e9e2);color:#3d4e40}
+    .dark .chip{background:linear-gradient(160deg,#3a4a3d,#2f3d33);color:#cdd7cd}
+  </style>
+</head>
+<body class="bg-stone-50 dark:bg-sage-900 text-ink dark:text-stone-100 font-sans tracking-tightish transition-colors">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-white focus:px-4 focus:py-2 focus:rounded-lg">Bỏ qua tới nội dung chính</a>
+
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-stone-50/80 dark:bg-sage-900/80 border-b hairline">
+    <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between" aria-label="Điều hướng chính">
+      <a href="index.html" class="flex items-center gap-2.5"><span class="grid place-items-center w-8 h-8 rounded-md border border-sage-600 dark:border-sage-300"><span class="w-2.5 h-2.5 rounded-full bg-sage-600 dark:bg-sage-300"></span></span><span class="font-serif text-xl font-semibold text-ink dark:text-white">Lặng</span></a>
+      <div class="hidden lg:flex items-center gap-7 text-[14px] text-sage-700 dark:text-stone-200">
+        <a href="index.html#tests" class="hover:text-sage-500 transition">Đánh giá</a>
+        <a href="index.html#knowledge" class="hover:text-sage-500 transition">Tra cứu</a>
+        <a href="books.html" class="hover:text-sage-500 transition">Thư viện sách</a>
+        <a href="community.html" class="hover:text-sage-500 transition">Cộng đồng</a>
+        <a href="mood-history.html" class="text-ink dark:text-white font-medium">Cảm xúc</a>
+        <a href="journal.html" class="hover:text-sage-500 transition">Nhật ký</a>
+      </div>
+      <div class="flex items-center gap-2.5"><button id="themeToggle" aria-label="Chuyển chế độ sáng/tối" class="grid place-items-center w-10 h-10 rounded-lg border hairline hover:bg-stone-100 dark:hover:bg-sage-800 transition text-sage-700 dark:text-stone-200"><i data-lucide="sun" class="dark:hidden w-[18px] h-[18px]"></i><i data-lucide="moon" class="hidden dark:block w-[18px] h-[18px]"></i></button></div>
+    </nav>
+  </header>
+
+  <main id="main" class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+    <div class="flex items-end justify-between flex-wrap gap-4">
+      <div>
+        <p class="text-[13px] uppercase tracking-[0.18em] text-sage-500 font-medium mb-3">Không gian của tôi</p>
+        <h1 class="font-serif text-4xl sm:text-5xl text-ink dark:text-white">Lịch sử cảm xúc</h1>
+      </div>
+      <div class="inline-flex rounded-lg border hairline bg-white dark:bg-sage-800 p-1 text-[13px]">
+        <button class="px-4 py-1.5 rounded-md bg-sage-700 text-white font-medium">Tháng</button>
+        <button class="px-4 py-1.5 rounded-md text-sage-700 dark:text-stone-200">Tuần</button>
+      </div>
+    </div>
+    <p class="mt-4 inline-flex items-center gap-2 text-[13px] text-sage-600 dark:text-stone-400"><i data-lucide="lock" class="w-4 h-4"></i> Dữ liệu lưu riêng tư trên thiết bị của bạn.</p>
+
+    <!-- STATS -->
+    <div class="mt-8 grid sm:grid-cols-3 gap-5">
+      <div class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-6"><span class="chip mb-4"><i data-lucide="calendar-check" style="width:1.25rem;height:1.25rem"></i></span><p class="text-3xl font-serif text-ink dark:text-white">24</p><p class="text-[13px] text-sage-600 dark:text-stone-400 mt-1">ngày đã ghi trong tháng</p></div>
+      <div class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-6"><span class="chip mb-4"><i data-lucide="smile" style="width:1.25rem;height:1.25rem"></i></span><p class="text-3xl font-serif text-ink dark:text-white">Ổn</p><p class="text-[13px] text-sage-600 dark:text-stone-400 mt-1">tâm trạng phổ biến nhất</p></div>
+      <div class="bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-6"><span class="chip mb-4"><i data-lucide="trending-up" style="width:1.25rem;height:1.25rem"></i></span><p class="text-3xl font-serif text-ink dark:text-white">+12%</p><p class="text-[13px] text-sage-600 dark:text-stone-400 mt-1">tích cực hơn so với tháng trước</p></div>
+    </div>
+
+    <!-- CALENDAR HEATMAP -->
+    <div class="mt-8 bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-6">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="font-serif text-xl text-ink dark:text-white">Tháng 6, 2026</h2>
+        <div class="flex items-center gap-2 text-sage-500"><button class="grid place-items-center w-8 h-8 rounded-lg hover:bg-stone-100 dark:hover:bg-sage-700 transition" aria-label="Tháng trước"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><button class="grid place-items-center w-8 h-8 rounded-lg hover:bg-stone-100 dark:hover:bg-sage-700 transition" aria-label="Tháng sau"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div>
+      </div>
+      <div class="grid grid-cols-7 gap-2 text-center text-[11px] text-sage-400 mb-2"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+      <div id="cal" class="grid grid-cols-7 gap-2"></div>
+      <!-- Legend -->
+      <div class="mt-6 flex flex-wrap items-center gap-4 text-[12px] text-sage-600 dark:text-stone-400">
+        <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-sage-400"></span> Tốt</span>
+        <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-sage-200"></span> Ổn</span>
+        <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-stone-300"></span> Lo âu</span>
+        <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-sos-200"></span> Giận</span>
+        <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-sos-400"></span> Tệ</span>
+        <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-stone-100 dark:bg-sage-700 border hairline"></span> Chưa ghi</span>
+      </div>
+    </div>
+
+    <!-- RECENT LIST -->
+    <div class="mt-8">
+      <h2 class="font-serif text-xl text-ink dark:text-white mb-4">Gần đây</h2>
+      <div class="space-y-3">
+        <div class="flex items-center gap-4 bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-4"><span class="grid place-items-center w-10 h-10 rounded-full bg-sage-100 dark:bg-sage-700 text-sage-600 dark:text-sage-200 shrink-0"><i data-lucide="laugh" class="w-5 h-5"></i></span><div class="flex-1"><p class="text-[15px] text-ink dark:text-white">Hôm nay · <span class="text-sage-600 dark:text-stone-400">Tốt</span></p><p class="text-[13px] text-sage-600 dark:text-stone-400">Gặp lại bạn cũ, thấy được lắng nghe.</p></div><span class="text-[12px] text-sage-400">04/06</span></div>
+        <div class="flex items-center gap-4 bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-4"><span class="grid place-items-center w-10 h-10 rounded-full bg-stone-200 dark:bg-sage-700 text-stone-600 dark:text-stone-300 shrink-0"><i data-lucide="meh" class="w-5 h-5"></i></span><div class="flex-1"><p class="text-[15px] text-ink dark:text-white">Hôm qua · <span class="text-sage-600 dark:text-stone-400">Lo âu</span></p><p class="text-[13px] text-sage-600 dark:text-stone-400">Deadline dồn dập, khó ngủ.</p></div><span class="text-[12px] text-sage-400">03/06</span></div>
+        <div class="flex items-center gap-4 bg-white dark:bg-sage-800 rounded-xl border hairline shadow-card p-4"><span class="grid place-items-center w-10 h-10 rounded-full bg-sage-50 dark:bg-sage-700 text-sage-500 dark:text-sage-300 shrink-0"><i data-lucide="smile" class="w-5 h-5"></i></span><div class="flex-1"><p class="text-[15px] text-ink dark:text-white">02/06 · <span class="text-sage-600 dark:text-stone-400">Ổn</span></p><p class="text-[13px] text-sage-600 dark:text-stone-400">Một ngày bình thường, tập thở buổi tối.</p></div><span class="text-[12px] text-sage-400">02/06</span></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-sage-900 text-stone-200 mt-8">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5"><span class="grid place-items-center w-8 h-8 rounded-md border border-sage-300"><span class="w-2.5 h-2.5 rounded-full bg-sage-300"></span></span><span class="font-serif text-xl text-white">Lặng</span></div>
+      <p class="text-[12px] text-stone-400 max-w-xl text-center sm:text-right leading-relaxed">Theo dõi cảm xúc giúp bạn hiểu mình, không phải để chẩn đoán. Nếu bạn đang gặp khủng hoảng, hãy bấm <span class="text-sos-300 font-medium">Cần hỗ trợ ngay</span> hoặc gọi 115.</p>
+    </div>
+  </footer>
+
+  <button id="sosBtn" aria-haspopup="dialog" class="fixed bottom-5 right-5 z-[80] flex items-center gap-2.5 pl-4 pr-5 py-3.5 rounded-full bg-sos-600 text-white font-medium shadow-lift hover:bg-sos-700 transition focus-visible:ring-4 focus-visible:ring-sos-200"><i data-lucide="life-buoy" class="w-5 h-5"></i> Cần hỗ trợ ngay</button>
+  <div id="sosModal" role="dialog" aria-modal="true" aria-labelledby="sosTitle" class="hidden fixed inset-0 z-[90] items-center justify-center p-4">
+    <div id="sosBackdrop" class="absolute inset-0 bg-sage-900/60 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-md bg-white dark:bg-sage-800 rounded-2xl shadow-lift p-8">
+      <div class="flex items-start justify-between gap-4"><div><span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-sos-50 dark:bg-sos-900/30 text-sos-600 dark:text-sos-300 mb-4"><i data-lucide="heart-handshake" class="w-5 h-5"></i></span><h2 id="sosTitle" class="font-serif text-2xl text-ink dark:text-white">Bạn không cô đơn</h2><p class="mt-1 text-[14px] text-sage-600 dark:text-stone-300">Luôn có người sẵn sàng lắng nghe bạn.</p></div><button id="sosClose" aria-label="Đóng" class="grid place-items-center w-9 h-9 rounded-full hover:bg-stone-100 dark:hover:bg-sage-700 transition text-sage-500"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+      <div class="mt-6 space-y-3">
+        <a href="tel:115" class="flex items-center justify-between p-4 rounded-xl bg-sos-50 dark:bg-sos-900/20 border border-sos-200 dark:border-sos-800 hover:bg-sos-100 transition"><div><p class="font-semibold text-sos-700 dark:text-sos-200">Cấp cứu y tế · 115</p><p class="text-[12px] text-sage-600 dark:text-stone-400">Nguy hiểm tức thời · 24/7</p></div><i data-lucide="phone" class="w-5 h-5 text-sos-600 dark:text-sos-300"></i></a>
+        <a href="tel:18001567" class="flex items-center justify-between p-4 rounded-xl bg-stone-50 dark:bg-sage-700 border hairline hover:bg-stone-100 transition"><div><p class="font-semibold text-ink dark:text-white">Đường dây hỗ trợ tâm lý <span class="text-[11px] font-normal text-sos-600">[CẦN VERIFY]</span></p><p class="text-[12px] text-sage-600 dark:text-stone-400">Giờ hoạt động: ___ · Miễn phí</p></div><i data-lucide="phone" class="w-5 h-5 text-sage-600 dark:text-stone-300"></i></a>
+        <p class="text-[12px] text-sage-500 dark:text-stone-400 leading-relaxed">Ngoài giờ hoạt động? Hãy nhắn cho người thân tin cậy, hoặc tới cơ sở y tế gần nhất. Hãy ở cạnh ai đó nếu có thể.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // calendar heatmap demo
+    const moods=['none','good','ok','anx','none','ok','good','good','ok','anx','bad','ok','good','ok','ok','good','anx','ok','good','good','ok','none','good','ok','anx','ok','good','good','ok','good'];
+    const colorFor={good:'bg-sage-400',ok:'bg-sage-200',anx:'bg-stone-300',angry:'bg-sos-200',bad:'bg-sos-400',none:'bg-stone-100 dark:bg-sage-700 border hairline'};
+    const cal=document.getElementById('cal');
+    // tháng 6/2026 bắt đầu thứ 2 -> offset 0; 30 ngày
+    for(let i=0;i<30;i++){const d=document.createElement('div');const m=moods[i]||'none';d.className='aspect-square rounded-lg '+(colorFor[m]||colorFor.none)+' grid place-items-center text-[11px] text-sage-700 dark:text-stone-200';d.textContent=i+1;d.title='Ngày '+(i+1);cal.appendChild(d);}
+
+    lucide.createIcons();
+    const root=document.documentElement;
+    if(localStorage.theme==='dark'||(!('theme'in localStorage)&&matchMedia('(prefers-color-scheme: dark)').matches))root.classList.add('dark');
+    themeToggle.onclick=()=>{root.classList.toggle('dark');localStorage.theme=root.classList.contains('dark')?'dark':'light'};
+    const modal=document.getElementById('sosModal');
+    sosBtn.onclick=()=>{modal.classList.remove('hidden');modal.classList.add('flex');sosClose.focus()};
+    const close=()=>{modal.classList.add('hidden');modal.classList.remove('flex');sosBtn.focus()};
+    sosClose.onclick=close;sosBackdrop.onclick=close;
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.classList.contains('hidden'))close()});
+  </script>
+</body>
+</html>

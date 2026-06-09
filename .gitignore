@@ -1,0 +1,29 @@
+# Dependencies
+**/node_modules/
+
+# Builds
+**/dist/
+**/.angular/cache/
+**/out-tsc/
+
+# Secrets — KHÔNG BAO GIỜ commit
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs / OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Test/artifacts
+**/coverage/
+lang-app/screenshots/
+
+# Claude Code config
+.claude/
