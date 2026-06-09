@@ -36,6 +36,8 @@ CREATE TABLE "users" (
     "isGuest" BOOLEAN NOT NULL DEFAULT false,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "under18" BOOLEAN NOT NULL DEFAULT false,
+    "resetTokenHash" TEXT,
+    "resetTokenExpiry" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
@@ -152,9 +154,13 @@ CREATE TABLE "books" (
     "category" "BookCategory" NOT NULL,
     "rating" DOUBLE PRECISION NOT NULL,
     "coverGradient" TEXT NOT NULL,
+    "coverUrl" TEXT,
+    "detail" TEXT,
+    "whyRead" TEXT,
     "reviewedByExpert" BOOLEAN NOT NULL DEFAULT false,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "books_pkey" PRIMARY KEY ("id")
 );
