@@ -65,7 +65,7 @@
   <div class="mt-8 space-y-4">
     @for (f of filtered(); track f.id) {
       <article class="bg-white dark:bg-sage-900 rounded-xl border hairline shadow-[var(--shadow-card)] p-6 hover:shadow-[var(--shadow-lift)] transition-shadow">
-        <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div class="flex-1 min-w-0">
             <!-- Name + verified -->
             <div class="flex items-center gap-2 flex-wrap">
@@ -94,7 +94,7 @@
           </div>
 
           <!-- Contact info -->
-          <div class="flex flex-col gap-2 shrink-0 min-w-[180px]">
+          <div class="flex flex-col gap-2 sm:shrink-0 sm:min-w-[180px]">
             @if (f.address) {
               <p class="flex items-start gap-2 text-[13px] text-sage-700 dark:text-stone-300">
                 <lucide-icon [img]="MapPin" class="w-4 h-4 shrink-0 mt-0.5 text-sage-500" /> {{ f.address }}
